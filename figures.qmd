@@ -142,12 +142,12 @@ gt::gt(select(s, -m))
 ```{r}
 tp_lim <- c(10, 30) # Keep 100?
 y_breaks <- c(0.1, 1, 10, 100, 1000)
-s_nudge <- -0.2
+pnt_alpha <- 0.6
 
 # y-Log base plot
 g0 <- ggplot(fig2_4, aes(x = tp_epi)) +
   theme_classic() +
-  theme(plot.margin = margin()) +
+  theme(plot.margin = margin(), plot.tag.position = c("topleft")) +
   scale_x_log10(name = bquote('TP'~(mu*g/L)), breaks = c(1, 10, 100, 1000), 
                 limits = c(1, 1000)) +
   scale_y_log10(breaks = y_breaks) +
@@ -170,7 +170,7 @@ g0.1 <- ggplot(fig2_4, aes(x = tp_epi)) +
 ##### Figure
 ```{r}
 g1 <- g0 %+% drop_na(fig2_4, chl) +
-  geom_point(aes(y = chl), colour = blu, na.rm = TRUE) +
+  geom_point(aes(y = chl), colour = blu, na.rm = TRUE, alpha = pnt_alpha) +
   stat_smooth(aes(y = chl), method = "lm", se = TRUE, na.rm = TRUE, colour = "black") +
   geom_text(data = s[s$y == "chl",], aes(label = lab, x = 1, y = 1000), hjust = 0, vjust = 1, size = 3, parse = TRUE) +
   labs(y = bquote("Chlorophyll"~(mu*g/L)))
@@ -205,14 +205,14 @@ g2 <- g0 %+% drop_na(fig2_4, secchi) +
         legend.direction = "horizontal",
         legend.background = element_rect(colour = "black"),
         legend.margin = margin(r = 10)) +
-  geom_point(aes(y = secchi, shape = humic_fct), colour = blu, na.rm = TRUE) +
+  geom_point(aes(y = secchi, shape = humic_fct), colour = blu, na.rm = TRUE, alpha = pnt_alpha) +
   stat_smooth(aes(y = secchi), method = "lm", se = TRUE, na.rm = TRUE, colour = "black") +
   geom_text(data = s[s$y == "secchi",], aes(label = lab, x = 1, y = 40), hjust = 0, vjust = 1, size = 3, parse = TRUE) +
   annotate("text", label = "Coloured", x = 3, y = 0.5) +
   annotate("text", label = "Clear", x = 200, y = 10) +
   labs(y = bquote("Transparency"~("Secchi, m"))) +
   scale_shape_manual(values = c("Coloured" = 19, "Clear" = 3)) +
-  scale_y_log10(limits = c(NA, 50), breaks = y_breaks)
+  scale_y_log10(limits = c(NA, 60), breaks = y_breaks)
 g2
 ```
 
@@ -233,7 +233,7 @@ DHARMa::simulateResiduals(s$m[s$y == "secchi"][[1]], plot = TRUE)
 ##### Figure
 ```{r}
 g3 <- g0 %+% drop_na(fig2_4, doc) +
-  geom_point(aes(y = doc), colour = blu, na.rm = TRUE) +
+  geom_point(aes(y = doc), colour = blu, na.rm = TRUE, alpha = pnt_alpha) +
   stat_smooth(aes(y = doc), method = "lm", se = TRUE, na.rm = TRUE, colour = "black") +
   geom_text(data = s[s$y == "doc",], aes(label = lab, x = 1, y = 95), hjust = 0, vjust = 1, size = 3, parse = TRUE) +
   labs(y = bquote("DOC"~(mg/L)))
@@ -256,7 +256,7 @@ DHARMa::simulateResiduals(s$m[s$y == "doc"][[1]], plot = TRUE)
 ##### Figure
 ```{r}
 g4 <- g0 %+% drop_na(fig2_4, color) +
-  geom_point(aes(y = color), colour = blu, na.rm = TRUE) +
+  geom_point(aes(y = color), colour = blu, na.rm = TRUE, alpha = pnt_alpha) +
   stat_smooth(aes(y = color), method = "lm", se = TRUE, na.rm = TRUE, colour = "black") +
   geom_text(data = s[s$y == "color",], aes(label = lab, x = 1, y = 400), hjust = 0, vjust = 1, size = 3, parse = TRUE) +
   labs(y = bquote("Colour"~(HU)))
@@ -278,7 +278,7 @@ DHARMa::simulateResiduals(s$m[s$y == "color"][[1]], plot = TRUE)
 ##### Figure
 ```{r}
 g5 <- g0 %+% drop_na(fig2_4, pri_proa) +
-  geom_point(aes(y = pri_proa), colour = blu, na.rm = TRUE) +
+  geom_point(aes(y = pri_proa), colour = blu, na.rm = TRUE, alpha = pnt_alpha) +
   stat_smooth(aes(y = pri_proa), method = "lm", se = TRUE, na.rm = TRUE, colour = "black") +
   geom_text(data = s[s$y == "pri_proa",], aes(label = lab, x = 1, y = 1000), hjust = 0, vjust = 1, size = 3, parse = TRUE) +
   labs(y = bquote("PA"~(g~C~m^2/yr)))
@@ -299,7 +299,7 @@ DHARMa::simulateResiduals(s$m[s$y == "pri_proa"][[1]], plot = TRUE)
 :::{.panel-tabset}
 ```{r}
 g6 <- g0 %+% drop_na(fig2_4, bac) +
-  geom_point(aes(y = bac), colour = blu, na.rm = TRUE) +
+  geom_point(aes(y = bac), colour = blu, na.rm = TRUE, alpha = pnt_alpha) +
   stat_smooth(aes(y = bac), method = "lm", se = TRUE, na.rm = TRUE, colour = "black") +
   geom_text(data = s[s$y == "bac",], aes(label = lab, x = 1, y = 25), hjust = 0, vjust = 1, size = 3, parse = TRUE) +
   labs(y = bquote("Bacteria number"~(10^6/mL)))
