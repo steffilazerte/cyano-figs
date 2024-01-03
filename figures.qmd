@@ -1,0 +1,252 @@
+---
+title: Figures for Cyanobook
+toc: true
+toc-depth: 3
+code-fold: true
+---
+
+This is the first pass of figures for the Cyano book. Figures are created
+individually and then combined into multi-part figures. 
+
+For the largest figure, I show the individual panels one-by-one along with questions.
+Then at the end I put them together. 
+
+## Setup
+
+Load packages and data, but only the data we need for these figures.
+
+```{r}
+#| message: false
+
+knitr::opts_chunk$set(out.width = "60%", fig.width = 5, fig.height = 4)
+
+library(tidyverse)
+library(readxl)
+library(janitor)
+library(patchwork)
+
+cyano <- read_excel("Data/PMODEL_Data for Steff Figs.xlsx", sheet = "Fig_Ch2", skip = 2) |>
+  clean_names() |>
+  select(source, lake,
+         tp_epi, osgood, trophy, afsum,
+         chl, secchi, humic, doc, color, pri_proa, bac, coldfish, fishabun)
+```
+
+
+## Figure 2.3
+
+This figure only uses values where the anoxic factor is > 0
+```{r}
+fig2_3 <- filter(cyano, afsum > 0)
+```
+
+
+**Getting the morphometric ratio lines**
+
+morphometric ratio (osgood) = z/Ao0.5
+
+afsum = -36.2 + 50.12 * log10(tp_epi) + 0.762 * osgood
+
+```{r}
+mr <- expand_grid(osgood = seq(0, 30, 2.5), 
+                  tp_epi = seq(1, 100)) |>
+  mutate(afsum = -36.2 + 50.12 * log10(tp_epi) + 0.762 * osgood)
+```
+
+> **Work in Progress**:
+> 
+> - Need: How are the morphometric ratio lines created?
+> - Below doesn't look right...
+
+```{r}
+#| fig-width: 8
+#| fig-height: 3
+#| fig-dpi: 600
+#| out-width: 100%
+
+g1 <- ggplot(fig2_3, aes(x = tp_epi, y = afsum)) +
+  theme_classic() +
+  geom_point(na.rm = TRUE) +
+  scale_x_log10(limits = c(5, 100), minor_breaks = c(1, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100)) +
+  scale_y_continuous(limits = c(0, 100)) +
+  geom_line(data = mr, aes(group = osgood), alpha = 0.4) +
+  labs(x = bquote('TP'~(mu*g/L)), y = bquote("Anoxic Factor"~(d/summer))) +
+  annotation_logticks(sides = "b")
+
+g2 <- ggplot(drop_na(fig2_3, trophy), aes(x = afsum, y = osgood, size = trophy)) +
+  theme_classic() +
+  geom_point(na.rm = TRUE) +
+  ylim(0, 50) +
+  xlim(0, 100) +
+  labs(x = bquote("Anoxic Factor"~(d/summer)), y = bquote("Morphometric ratio"~(m/km^2)),
+       size = "Tropic level")
+
+g1 + g2 + plot_annotation(tag_levels = "A", tag_prefix = "(", tag_suffix = ")")
+```
+
+## Figure 2.4
+
+> **Consider:**
+>
+> **Putting the fish plots as a separate plot**
+>
+> - They have a different scale of data (TP much more limited)
+> - The y axis is not log10
+>
+> **Data isn't the same as in the example plots**
+> 
+> - Is this okay?
+> - Or should I be filtering data?
+
+### Setup the data and the base plots
+
+```{r}
+fig2_4 <- cyano |>
+  mutate(humic_fct = if_else(humic == 1, "Coloured", "Clear"))
+
+tp_lim <- c(10, 30) # Keep 100?
+y_breaks <- c(0.1, 1, 10, 100, 1000)
+
+# y-Log base plot
+g0 <- ggplot(fig2_4, aes(x = tp_epi)) +
+  theme_classic() +
+  theme(plot.margin = margin()) +
+  scale_x_log10(name = bquote('TP'~(mu*g/L)), breaks = c(1, 10, 100, 1000)) +
+  scale_y_log10(breaks = y_breaks) +
+  annotation_logticks()
+
+# Non-y-log base plot
+g0.1 <- ggplot(fig2_4, aes(x = tp_epi)) +
+  theme_classic() +
+  theme(plot.margin = margin()) +
+  scale_x_log10(name = bquote('TP'~(mu*g/L)), limits = c(5, 50), breaks = c(1, 10, 20, 30, 40, 50)) +
+  annotation_logticks(sides = "b")
+```
+
+### Create the figures
+
+#### Chlorophyl
+
+```{r}
+g1 <- g0 +
+  geom_point(aes(y = chl), na.rm = TRUE) +
+  stat_smooth(aes(y = chl), method = "lm", se = FALSE, na.rm = TRUE, colour = "black") +
+  labs(y = bquote("Chlorophyll"~(mu*g/L)))
+g1
+```
+
+#### Transparency
+
+> **Questions**
+> 
+> - Which HUMIC are clear/coloured? (0/3 = clear, 1 = coloured?)
+> - This has extra data compare to example figure... okay? (see especially low values of TP)
+
+```{r}
+g2 <- g0 +
+  theme(legend.title = element_blank(),
+        legend.position = c(0.5, 0.97),
+        legend.direction = "horizontal",
+        legend.background = element_rect(colour = "black"),
+        legend.margin = margin(r = 10)) +
+  geom_point(aes(y = secchi, shape = humic_fct), na.rm = TRUE) +
+  stat_smooth(aes(y = secchi), method = "lm", se = FALSE, na.rm = TRUE, colour = "black") +
+  annotate("text", label = "Coloured", x = 3, y = 0.5) +
+  annotate("text", label = "Clear", x = 200, y = 10) +
+  labs(y = bquote("Transparency"~("Secchi, m"))) +
+  scale_shape_manual(values = c("Coloured" = 19, "Clear" = 3))
+g2
+```
+
+#### DOC
+
+> **Questions**
+> 
+> - What is the regression line in this figure?
+> - In the example it doesn't seem to line up with the data, here I just used
+>   the data present
+
+```{r}
+g3 <- g0 +
+  geom_point(aes(y = doc), na.rm = TRUE) +
+  stat_smooth(aes(y = doc), method = "lm", se = FALSE, na.rm = TRUE, colour = "black") +
+  labs(y = bquote("DOC"~(mg/L))) +
+  geom_vline(xintercept = tp_lim, linetype = "dashed")
+g3
+```
+
+
+#### Colour
+
+```{r}
+g4 <- g0 +
+  geom_point(aes(y = color), na.rm = TRUE) +
+  stat_smooth(aes(y = color), method = "lm", se = FALSE, na.rm = TRUE, colour = "black") +
+  labs(y = bquote("Colour"~(HU))) +
+  geom_vline(xintercept = tp_lim, linetype = "dashed")
+g4
+```
+
+#### PA
+```{r}
+g5 <- g0 +
+  geom_point(aes(y = pri_proa), na.rm = TRUE) +
+  stat_smooth(aes(y = pri_proa), method = "lm", se = FALSE, na.rm = TRUE, colour = "black") +
+  labs(y = bquote("PA"~(g~C~m^2/yr)))
+g5
+```
+
+#### Bacteria number
+```{r}
+g6 <- g0 +
+  geom_point(aes(y = bac), na.rm = TRUE) +
+  stat_smooth(aes(y = bac), method = "lm", se = FALSE, na.rm = TRUE, colour = "black") +
+  labs(y = bquote("Bacteria number"~(10^6/mL)))
+g6
+```
+
+### Combine figures
+
+```{r}
+#| fig-width: 8
+#| fig-height: 9
+#| fig-dpi: 600
+#| out-width: 100%
+
+(g1 + g2) / (g3 + g4) / (g5 + g6) + plot_annotation(tag_levels = "A", tag_prefix = "(", tag_suffix = ")")
+```
+
+
+### Fish Figures
+> **Questions**
+> 
+> - These data don't seem to match the example figures
+> - By which variables should the symbols be marked?
+
+```{r}
+#| fig-width: 5
+#| fig-height: 5
+#| fig-dpi: 600
+#| out-width: 50%
+
+g7 <- g0.1 +
+  theme(axis.title.x = element_blank(), axis.ticks.x = element_blank(),
+        axis.text.x = element_blank()) +
+  geom_point(aes(y = coldfish), na.rm = TRUE) +
+  labs(y = bquote("Coldwater Fish Species"~("#"))) +
+  geom_vline(xintercept = tp_lim, linetype = "dashed")
+
+g8 <- g0.1 +
+  geom_point(aes(y = fishabun), na.rm = TRUE) +
+  labs(y = bquote("Total Fish Species"~("#"))) +
+  geom_vline(xintercept = tp_lim, linetype = "dashed")
+
+g7 / g8 + plot_annotation(tag_levels = "A", tag_prefix = "(", tag_suffix = ")")
+```
+
+
+## Reproducibility
+```{r}
+devtools::session_info()
+```
+
