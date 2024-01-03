@@ -220,6 +220,8 @@ g2
 
 A bit of variability in residuals, probably not a huge problem
 ```{r}
+#| fig-width: 8
+#| out-width: 100%
 DHARMa::simulateResiduals(s$m[s$y == "secchi"][[1]], plot = TRUE)
 ```
 :::
@@ -244,6 +246,8 @@ g3
 
 A bit of variability in residuals, probably not a huge problem
 ```{r}
+#| fig-width: 8
+#| out-width: 100%
 DHARMa::simulateResiduals(s$m[s$y == "doc"][[1]], plot = TRUE)
 ```
 :::
@@ -267,6 +271,8 @@ g4
 
 A bit of variability in residuals, probably not a huge problem
 ```{r}
+#| fig-width: 8
+#| out-width: 100%
 DHARMa::simulateResiduals(s$m[s$y == "color"][[1]], plot = TRUE)
 ```
 :::
@@ -289,6 +295,8 @@ g5
 
 A bit of variability in residuals, probably not a huge problem
 ```{r}
+#| fig-width: 8
+#| out-width: 100%
 DHARMa::simulateResiduals(s$m[s$y == "pri_proa"][[1]], plot = TRUE)
 ```
 :::
@@ -297,6 +305,8 @@ DHARMa::simulateResiduals(s$m[s$y == "pri_proa"][[1]], plot = TRUE)
 
 
 :::{.panel-tabset}
+
+##### Figure
 ```{r}
 g6 <- g0 %+% drop_na(fig2_4, bac) +
   geom_point(aes(y = bac), colour = blu, na.rm = TRUE, alpha = pnt_alpha) +
@@ -310,7 +320,9 @@ g6
 
 A bit of variability in residuals, probably not a huge problem
 ```{r}
-DHARMa::simulateResiduals(s$m[s$y == "pri_proa"][[1]], plot = TRUE)
+#| fig-width: 8
+#| out-width: 100%
+DHARMa::simulateResiduals(s$m[s$y == "bac"][[1]], plot = TRUE)
 ```
 :::
 
