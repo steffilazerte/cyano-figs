@@ -30,6 +30,8 @@ cyano <- read_excel("Data/PMODEL_Data for Steff Figs.xlsx", sheet = "Fig_Ch2", s
   select(source, lake,
          tp_epi, osgood, trophy, afsum,
          chl, secchi, humic, doc, color, pri_proa, bac, coldfish, fishabun)
+
+blu <- "blue3" # Standard point colour
 ```
 
 
@@ -75,13 +77,13 @@ g1 <- ggplot(fig2_3, aes(x = tp_epi, y = afsum)) +
 
 g2 <- ggplot(drop_na(fig2_3, trophy), aes(x = afsum, y = osgood, size = trophy)) +
   theme_classic() +
-  geom_point(na.rm = TRUE) +
+  geom_point(na.rm = TRUE, alpha = 0.4) +
   ylim(0, 50) +
   xlim(0, 100) +
   labs(x = bquote("Anoxic Factor"~(d/summer)), y = bquote("Morphometric ratio"~(m/km^2)),
        size = "Tropic level")
 
-g1 + g2 + plot_annotation(tag_levels = "A", tag_prefix = "(", tag_suffix = ")")
+g1 + g2 + plot_annotation(tag_levels = "A")
 ```
 
 ## Figure 2.4
@@ -98,20 +100,56 @@ g1 + g2 + plot_annotation(tag_levels = "A", tag_prefix = "(", tag_suffix = ")")
 > - Is this okay?
 > - Or should I be filtering data?
 
-### Setup the data and the base plots
+### Setup the data
 
 ```{r}
 fig2_4 <- cyano |>
+  drop_na(tp_epi) |>
   mutate(humic_fct = if_else(humic == 1, "Coloured", "Clear"))
+```
 
+### Get stats
+
+```{r}
+s <- tibble(
+  y = c("chl", "secchi", "doc", "color", "pri_proa", "bac", "coldfish", "fishabun"),
+  m = list(lm(log10(chl) ~ log10(tp_epi), data = fig2_4),
+           lm(log10(secchi) ~ log10(tp_epi), data = fig2_4),
+           lm(log10(doc) ~ log10(tp_epi), data = fig2_4),
+           lm(log10(color) ~ log10(tp_epi), data = fig2_4),
+           lm(log10(pri_proa) ~ log10(tp_epi), data = fig2_4),
+           lm(log10(bac) ~ log10(tp_epi), data = fig2_4),
+           lm(coldfish ~ log10(tp_epi), data = fig2_4),
+           lm(fishabun ~ log10(tp_epi), data = fig2_4))) |>
+  mutate(r2 = map_dbl(m, \(x) summary(x)$adj.r.squared),
+         p = map_dbl(m, \(x) summary(x)$coefficients[2, 4]), # Get the non-intercept p-value
+         sig = p < 0.05,
+         n = map_dbl(m, \(x) length(residuals(x))),
+         r2 = paste0("R^2 == ", round(r2, 2)),
+         n = paste0("n == ", n),
+         #lab = paste0("atop(", r2, ", ~", n, ")"))
+         lab = paste0(r2, "*';'~", n))
+```
+
+```{r}
+gt::gt(select(s, -m))
+```
+
+
+
+### Setup base plots
+
+```{r}
 tp_lim <- c(10, 30) # Keep 100?
 y_breaks <- c(0.1, 1, 10, 100, 1000)
+s_nudge <- -0.2
 
 # y-Log base plot
 g0 <- ggplot(fig2_4, aes(x = tp_epi)) +
   theme_classic() +
   theme(plot.margin = margin()) +
-  scale_x_log10(name = bquote('TP'~(mu*g/L)), breaks = c(1, 10, 100, 1000)) +
+  scale_x_log10(name = bquote('TP'~(mu*g/L)), breaks = c(1, 10, 100, 1000), 
+                limits = c(1, 1000)) +
   scale_y_log10(breaks = y_breaks) +
   annotation_logticks()
 
@@ -127,13 +165,28 @@ g0.1 <- ggplot(fig2_4, aes(x = tp_epi)) +
 
 #### Chlorophyl
 
+:::{.panel-tabset}
+
+##### Figure
 ```{r}
-g1 <- g0 +
-  geom_point(aes(y = chl), na.rm = TRUE) +
-  stat_smooth(aes(y = chl), method = "lm", se = FALSE, na.rm = TRUE, colour = "black") +
+g1 <- g0 %+% drop_na(fig2_4, chl) +
+  geom_point(aes(y = chl), colour = blu, na.rm = TRUE) +
+  stat_smooth(aes(y = chl), method = "lm", se = TRUE, na.rm = TRUE, colour = "black") +
+  geom_text(data = s[s$y == "chl",], aes(label = lab, x = 1, y = 1000), hjust = 0, vjust = 1, size = 3, parse = TRUE) +
   labs(y = bquote("Chlorophyll"~(mu*g/L)))
 g1
 ```
+
+##### Model diagnostics
+
+A bit of variability in residuals, probably not a huge problem
+```{r}
+#| fig-width: 8
+#| out-width: 100%
+DHARMa::simulateResiduals(s$m[s$y == "chl"][[1]], plot = TRUE)
+```
+
+:::
 
 #### Transparency
 
@@ -142,68 +195,125 @@ g1
 > - Which HUMIC are clear/coloured? (0/3 = clear, 1 = coloured?)
 > - This has extra data compare to example figure... okay? (see especially low values of TP)
 
+:::{.panel-tabset}
+
+##### Figure
 ```{r}
-g2 <- g0 +
+g2 <- g0 %+% drop_na(fig2_4, secchi) +
   theme(legend.title = element_blank(),
         legend.position = c(0.5, 0.97),
         legend.direction = "horizontal",
         legend.background = element_rect(colour = "black"),
         legend.margin = margin(r = 10)) +
-  geom_point(aes(y = secchi, shape = humic_fct), na.rm = TRUE) +
-  stat_smooth(aes(y = secchi), method = "lm", se = FALSE, na.rm = TRUE, colour = "black") +
+  geom_point(aes(y = secchi, shape = humic_fct), colour = blu, na.rm = TRUE) +
+  stat_smooth(aes(y = secchi), method = "lm", se = TRUE, na.rm = TRUE, colour = "black") +
+  geom_text(data = s[s$y == "secchi",], aes(label = lab, x = 1, y = 40), hjust = 0, vjust = 1, size = 3, parse = TRUE) +
   annotate("text", label = "Coloured", x = 3, y = 0.5) +
   annotate("text", label = "Clear", x = 200, y = 10) +
   labs(y = bquote("Transparency"~("Secchi, m"))) +
-  scale_shape_manual(values = c("Coloured" = 19, "Clear" = 3))
+  scale_shape_manual(values = c("Coloured" = 19, "Clear" = 3)) +
+  scale_y_log10(limits = c(NA, 50), breaks = y_breaks)
 g2
 ```
 
+##### Model diagnostics
+
+A bit of variability in residuals, probably not a huge problem
+```{r}
+DHARMa::simulateResiduals(s$m[s$y == "secchi"][[1]], plot = TRUE)
+```
+:::
+
 #### DOC
 
-> **Questions**
-> 
-> - What is the regression line in this figure?
-> - In the example it doesn't seem to line up with the data, here I just used
->   the data present
+> This is significant, actually...
 
+:::{.panel-tabset}
+
+##### Figure
 ```{r}
-g3 <- g0 +
-  geom_point(aes(y = doc), na.rm = TRUE) +
-  stat_smooth(aes(y = doc), method = "lm", se = FALSE, na.rm = TRUE, colour = "black") +
-  labs(y = bquote("DOC"~(mg/L))) +
-  geom_vline(xintercept = tp_lim, linetype = "dashed")
+g3 <- g0 %+% drop_na(fig2_4, doc) +
+  geom_point(aes(y = doc), colour = blu, na.rm = TRUE) +
+  stat_smooth(aes(y = doc), method = "lm", se = TRUE, na.rm = TRUE, colour = "black") +
+  geom_text(data = s[s$y == "doc",], aes(label = lab, x = 1, y = 95), hjust = 0, vjust = 1, size = 3, parse = TRUE) +
+  labs(y = bquote("DOC"~(mg/L)))
 g3
 ```
+
+##### Model diagnostics
+
+A bit of variability in residuals, probably not a huge problem
+```{r}
+DHARMa::simulateResiduals(s$m[s$y == "doc"][[1]], plot = TRUE)
+```
+:::
 
 
 #### Colour
 
+:::{.panel-tabset}
+
+##### Figure
 ```{r}
-g4 <- g0 +
-  geom_point(aes(y = color), na.rm = TRUE) +
-  stat_smooth(aes(y = color), method = "lm", se = FALSE, na.rm = TRUE, colour = "black") +
-  labs(y = bquote("Colour"~(HU))) +
-  geom_vline(xintercept = tp_lim, linetype = "dashed")
+g4 <- g0 %+% drop_na(fig2_4, color) +
+  geom_point(aes(y = color), colour = blu, na.rm = TRUE) +
+  stat_smooth(aes(y = color), method = "lm", se = TRUE, na.rm = TRUE, colour = "black") +
+  geom_text(data = s[s$y == "color",], aes(label = lab, x = 1, y = 400), hjust = 0, vjust = 1, size = 3, parse = TRUE) +
+  labs(y = bquote("Colour"~(HU)))
 g4
 ```
 
-#### PA
+##### Model diagnostics
+
+A bit of variability in residuals, probably not a huge problem
 ```{r}
-g5 <- g0 +
-  geom_point(aes(y = pri_proa), na.rm = TRUE) +
-  stat_smooth(aes(y = pri_proa), method = "lm", se = FALSE, na.rm = TRUE, colour = "black") +
+DHARMa::simulateResiduals(s$m[s$y == "color"][[1]], plot = TRUE)
+```
+:::
+
+#### PA
+
+:::{.panel-tabset}
+
+##### Figure
+```{r}
+g5 <- g0 %+% drop_na(fig2_4, pri_proa) +
+  geom_point(aes(y = pri_proa), colour = blu, na.rm = TRUE) +
+  stat_smooth(aes(y = pri_proa), method = "lm", se = TRUE, na.rm = TRUE, colour = "black") +
+  geom_text(data = s[s$y == "pri_proa",], aes(label = lab, x = 1, y = 1000), hjust = 0, vjust = 1, size = 3, parse = TRUE) +
   labs(y = bquote("PA"~(g~C~m^2/yr)))
 g5
 ```
 
-#### Bacteria number
+##### Model diagnostics
+
+A bit of variability in residuals, probably not a huge problem
 ```{r}
-g6 <- g0 +
-  geom_point(aes(y = bac), na.rm = TRUE) +
-  stat_smooth(aes(y = bac), method = "lm", se = FALSE, na.rm = TRUE, colour = "black") +
+DHARMa::simulateResiduals(s$m[s$y == "pri_proa"][[1]], plot = TRUE)
+```
+:::
+
+#### Bacteria number
+
+
+:::{.panel-tabset}
+```{r}
+g6 <- g0 %+% drop_na(fig2_4, bac) +
+  geom_point(aes(y = bac), colour = blu, na.rm = TRUE) +
+  stat_smooth(aes(y = bac), method = "lm", se = TRUE, na.rm = TRUE, colour = "black") +
+  geom_text(data = s[s$y == "bac",], aes(label = lab, x = 1, y = 25), hjust = 0, vjust = 1, size = 3, parse = TRUE) +
   labs(y = bquote("Bacteria number"~(10^6/mL)))
 g6
 ```
+
+##### Model diagnostics
+
+A bit of variability in residuals, probably not a huge problem
+```{r}
+DHARMa::simulateResiduals(s$m[s$y == "pri_proa"][[1]], plot = TRUE)
+```
+:::
+
 
 ### Combine figures
 
@@ -213,7 +323,7 @@ g6
 #| fig-dpi: 600
 #| out-width: 100%
 
-(g1 + g2) / (g3 + g4) / (g5 + g6) + plot_annotation(tag_levels = "A", tag_prefix = "(", tag_suffix = ")")
+(g1 + g2) / (g3 + g4) / (g5 + g6) + plot_annotation(tag_levels = "A")
 ```
 
 
