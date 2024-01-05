@@ -29,7 +29,8 @@ cyano <- read_excel("Data/PMODEL_Data for Steff Figs.xlsx", sheet = "Fig_Ch2", s
   clean_names() |>
   select(source, lake,
          tp_epi, osgood, trophy, afsum,
-         chl, secchi, humic, doc, color, pri_proa, bac, coldfish, fishabun)
+         chl, secchi, humic, doc, color, pri_proa, bac, z, tn,
+         coldfish, fishabun)
 
 blu <- "blue3" # Standard point colour
 ```
@@ -172,7 +173,7 @@ g0.1 <- ggplot(fig2_4, aes(x = tp_epi)) +
 g1 <- g0 %+% drop_na(fig2_4, chl) +
   geom_point(aes(y = chl), colour = blu, na.rm = TRUE, alpha = pnt_alpha) +
   stat_smooth(aes(y = chl), method = "lm", se = TRUE, na.rm = TRUE, colour = "black") +
-  geom_text(data = s[s$y == "chl",], aes(label = lab, x = 1, y = 1000), hjust = 0, vjust = 1, size = 3, parse = TRUE) +
+  #geom_text(data = s[s$y == "chl",], aes(label = lab, x = 1, y = 1000), hjust = 0, vjust = 1, size = 3, parse = TRUE) +
   labs(y = bquote("Chlorophyll"~(mu*g/L)))
 g1
 ```
@@ -190,10 +191,6 @@ DHARMa::simulateResiduals(s$m[s$y == "chl"][[1]], plot = TRUE)
 
 #### Transparency
 
-> **Questions**
-> 
-> - Which HUMIC are clear/coloured? (0/3 = clear, 1 = coloured?)
-> - This has extra data compare to example figure... okay? (see especially low values of TP)
 
 :::{.panel-tabset}
 
@@ -207,12 +204,12 @@ g2 <- g0 %+% drop_na(fig2_4, secchi) +
         legend.margin = margin(r = 10)) +
   geom_point(aes(y = secchi, shape = humic_fct), colour = blu, na.rm = TRUE, alpha = pnt_alpha) +
   stat_smooth(aes(y = secchi), method = "lm", se = TRUE, na.rm = TRUE, colour = "black") +
-  geom_text(data = s[s$y == "secchi",], aes(label = lab, x = 1, y = 40), hjust = 0, vjust = 1, size = 3, parse = TRUE) +
+  #geom_text(data = s[s$y == "secchi",], aes(label = lab, x = 1, y = 40), hjust = 0, vjust = 1, size = 3, parse = TRUE) +
   annotate("text", label = "Coloured", x = 3, y = 0.5) +
   annotate("text", label = "Clear", x = 200, y = 10) +
   labs(y = bquote("Transparency"~("Secchi, m"))) +
   scale_shape_manual(values = c("Coloured" = 19, "Clear" = 3)) +
-  scale_y_log10(limits = c(NA, 60), breaks = y_breaks)
+  scale_y_log10(limits = c(NA, 35), breaks = y_breaks)
 g2
 ```
 
@@ -237,7 +234,7 @@ DHARMa::simulateResiduals(s$m[s$y == "secchi"][[1]], plot = TRUE)
 g3 <- g0 %+% drop_na(fig2_4, doc) +
   geom_point(aes(y = doc), colour = blu, na.rm = TRUE, alpha = pnt_alpha) +
   stat_smooth(aes(y = doc), method = "lm", se = TRUE, na.rm = TRUE, colour = "black") +
-  geom_text(data = s[s$y == "doc",], aes(label = lab, x = 1, y = 95), hjust = 0, vjust = 1, size = 3, parse = TRUE) +
+  #geom_text(data = s[s$y == "doc",], aes(label = lab, x = 1, y = 95), hjust = 0, vjust = 1, size = 3, parse = TRUE) +
   labs(y = bquote("DOC"~(mg/L)))
 g3
 ```
@@ -262,7 +259,7 @@ DHARMa::simulateResiduals(s$m[s$y == "doc"][[1]], plot = TRUE)
 g4 <- g0 %+% drop_na(fig2_4, color) +
   geom_point(aes(y = color), colour = blu, na.rm = TRUE, alpha = pnt_alpha) +
   stat_smooth(aes(y = color), method = "lm", se = TRUE, na.rm = TRUE, colour = "black") +
-  geom_text(data = s[s$y == "color",], aes(label = lab, x = 1, y = 400), hjust = 0, vjust = 1, size = 3, parse = TRUE) +
+  #geom_text(data = s[s$y == "color",], aes(label = lab, x = 1, y = 400), hjust = 0, vjust = 1, size = 3, parse = TRUE) +
   labs(y = bquote("Colour"~(HU)))
 g4
 ```
@@ -286,7 +283,7 @@ DHARMa::simulateResiduals(s$m[s$y == "color"][[1]], plot = TRUE)
 g5 <- g0 %+% drop_na(fig2_4, pri_proa) +
   geom_point(aes(y = pri_proa), colour = blu, na.rm = TRUE, alpha = pnt_alpha) +
   stat_smooth(aes(y = pri_proa), method = "lm", se = TRUE, na.rm = TRUE, colour = "black") +
-  geom_text(data = s[s$y == "pri_proa",], aes(label = lab, x = 1, y = 1000), hjust = 0, vjust = 1, size = 3, parse = TRUE) +
+  #geom_text(data = s[s$y == "pri_proa",], aes(label = lab, x = 1, y = 1000), hjust = 0, vjust = 1, size = 3, parse = TRUE) +
   labs(y = bquote("PA"~(g~C~m^2/yr)))
 g5
 ```
@@ -311,7 +308,7 @@ DHARMa::simulateResiduals(s$m[s$y == "pri_proa"][[1]], plot = TRUE)
 g6 <- g0 %+% drop_na(fig2_4, bac) +
   geom_point(aes(y = bac), colour = blu, na.rm = TRUE, alpha = pnt_alpha) +
   stat_smooth(aes(y = bac), method = "lm", se = TRUE, na.rm = TRUE, colour = "black") +
-  geom_text(data = s[s$y == "bac",], aes(label = lab, x = 1, y = 25), hjust = 0, vjust = 1, size = 3, parse = TRUE) +
+  #geom_text(data = s[s$y == "bac",], aes(label = lab, x = 1, y = 25), hjust = 0, vjust = 1, size = 3, parse = TRUE) +
   labs(y = bquote("Bacteria number"~(10^6/mL)))
 g6
 ```
@@ -327,6 +324,28 @@ DHARMa::simulateResiduals(s$m[s$y == "bac"][[1]], plot = TRUE)
 :::
 
 
+#### Depth
+
+##### Figure
+```{r}
+g7 <- g0 %+% drop_na(fig2_4, z) +
+  geom_point(aes(y = z), colour = blu, na.rm = TRUE, alpha = pnt_alpha) +
+  stat_smooth(aes(y = z), method = "lm", se = TRUE, na.rm = TRUE, colour = "black") +
+  labs(y = bquote("Mean Depth"~(m)))
+g7
+```
+
+#### Total Nitrogen
+
+##### Figure
+```{r}
+g8 <- g0 %+% drop_na(fig2_4, tn) +
+  geom_point(aes(y = tn), colour = blu, na.rm = TRUE, alpha = pnt_alpha) +
+  stat_smooth(aes(y = tn), method = "lm", se = TRUE, na.rm = TRUE, colour = "black") +
+  labs(y = bquote("Total Nitrogen "~(mu*g/L)))
+g8
+```
+
 ### Combine figures
 
 ```{r}
@@ -335,7 +354,7 @@ DHARMa::simulateResiduals(s$m[s$y == "bac"][[1]], plot = TRUE)
 #| fig-dpi: 600
 #| out-width: 100%
 
-(g1 + g2) / (g3 + g4) / (g5 + g6) + plot_annotation(tag_levels = "A")
+(g7 + g8) / (g1 + g2) / (g3 + g4) / (g5 + g6) + plot_annotation(tag_levels = "A")
 ```
 
 
