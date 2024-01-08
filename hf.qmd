@@ -1,0 +1,83 @@
+---
+title: "Hypoxia factor"
+format: html
+---
+
+## Setup
+```{r}
+#| message: false
+
+knitr::opts_chunk$set(out.width = "60%", fig.width = 5, fig.height = 4)
+
+library(tidyverse)
+library(readxl)
+library(janitor)
+library(patchwork)
+library(ggrepel)
+
+# Systat file
+d <- read_excel("Data/Steff Fig. 4_11.xls") |>
+  clean_names() |>
+  select(year, af, af_epi, hf, hf_epi, pni)
+
+blu <- "blue3" # Standard point colour
+```
+
+## Stats
+
+:::{.panel-tabset}
+
+### Summary
+```{r}
+m1 <- lm(hf ~ pni, data = d)
+summary(m1)
+
+m2 <- lm(hf_epi ~ pni, data = d)
+summary(m2)
+```
+
+### Checks
+```{r}
+DHARMa::simulateResiduals(m1, plot = TRUE)
+DHARMa::simulateResiduals(m2, plot = TRUE)
+```
+:::
+
+
+
+## Figure
+
+```{r}
+#| fig-width: 5
+#| fig-height: 5
+#| fig-dpi: 600
+#| out-width: 50%
+#| 
+
+d$nudge_y <- 0
+d$nudge_y[d$year %in% c(1995, 1993, 1994, 1963)] <- -3
+d$nudge_y[d$year == 1993] <- -3.5
+
+g0 <- ggplot(d, aes(x = pni)) +
+  theme_classic() +
+  theme(plot.margin = margin(), plot.tag.position = c("topleft")) +
+  scale_x_continuous(name = "Pacific Northwest Index", limits = c(-0.6, 1.75))
+
+g1 <- g0 +
+  theme(axis.text.x = element_blank(), axis.title.x = element_blank()) +
+  geom_point(aes(y = hf), colour = blu) +
+  geom_text(aes(y = hf, label = year), size = 3.25, hjust = 1.1, vjust = 1, nudge_y = -2) +
+  stat_smooth(aes(y = hf), method = "lm", se = TRUE, colour = "black") +
+  ylim(100, NA) +
+  labs(y = "HF (days/yr)")
+
+g2 <- g0 +
+  geom_point(aes(y = hf_epi), colour = blu) +
+  geom_text(aes(y = hf_epi, label = year), size = 3.25, hjust = -0.2, vjust = -0.5,
+            nudge_y = d$nudge_y) +
+  stat_smooth(aes(y = hf_epi), method = "lm", se = TRUE, colour = "black") +
+  labs(y = "Epilimnetic HF (days/yr)")
+
+g1 / g2 + plot_annotation(tag_levels = "A")
+```
+
