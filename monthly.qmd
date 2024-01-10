@@ -1,0 +1,93 @@
+---
+title: Monthly figure for Cyanobook
+toc: true
+toc-depth: 3
+code-fold: true
+---
+
+This is the figure of monthly
+
+For the largest figure, I show the individual panels one-by-one along with questions.
+Then at the end I put them together. 
+
+## Setup
+
+Load packages and data, but only the data we need for these figures.
+
+```{r}
+#| message: false
+
+knitr::opts_chunk$set(out.width = "60%", fig.width = 5, fig.height = 4)
+
+library(tidyverse)
+library(readxl)
+library(janitor)
+library(patchwork)
+library(assertr)
+
+type <- read_excel("Data/Fig 3_8.xlsx", n_max = 1, col_names = FALSE) |>
+  as.vector()
+type_pos <- which(!is.na(type))
+
+tp <- read_excel("Data/Fig 3_8.xlsx",
+                 range = cell_limits(c(3, type_pos[1]), c(NA, type_pos[2]-1)),
+                 col_names = c("year", month.abb[5:11])) |>
+  mutate(type = "tp")
+
+srp <- read_excel("Data/Fig 3_8.xlsx", .name_repair = "minimal",
+                 range = cell_limits(c(3, type_pos[2] + 1), c(NA, type_pos[3]-1)),
+                 col_names = month.abb[5:11]) |>
+  mutate(type = "srp", 
+         year = tp$year)
+
+chl <- read_excel("Data/Fig 3_8.xlsx", .name_repair = "minimal",
+                 range = cell_limits(c(3, type_pos[3] + 1), c(NA, NA)),
+                 col_names = month.abb[5:11]) |>
+  mutate(type = "chl",
+         year = tp$year[-1])
+
+monthly <- bind_rows(tp, srp, chl) |>
+  pivot_longer(cols = -c(type, year), names_to = "month") |>
+  mutate(month = factor(month, levels = month.abb)) |>
+  assert(in_set(month.abb[5:11]), month) |>
+  assert(in_set(1986:2011), year) |>
+  # Expect same number of years for all except chlorophyl
+  verify(length(month) == (length(1986:2011) * 3 * length(5:11) - length(5:11)))
+  
+blu <- "blue3" # Standard point colour
+```
+
+
+## Figures
+
+```{r}
+#| fig-width: 4
+#| fig-height: 6
+#| fig-dpi: 600
+#| out-width: 40%
+#| 
+g1 <- ggplot(data = filter(monthly, type == "tp"), aes(x = month, y = value)) +
+  geom_boxplot(colour = blu) +
+  labs(y = bquote("Epilimnetic TP"~(µg/L)))
+
+g2 <- ggplot(data = filter(monthly, type == "srp"), aes(x = month, y = value)) +
+  theme_classic() +
+  geom_boxplot(colour = blu) +
+  labs(y = bquote("Epilimnetic SRP"~(µg/L)))
+
+g3 <- ggplot(data = filter(monthly, type == "chl"), aes(x = month, y = value)) +
+  theme_classic() +
+  geom_boxplot(colour = blu) +
+  labs(y = bquote("Chlorophyll"~(µg/L)))
+
+g1 / g2 / g3 +
+  plot_layout(axes = "collect") +
+  plot_annotation(tag_levels = "A") &
+  theme_bw() &
+  theme(plot.margin = margin(), 
+        plot.tag.position = c("topleft"), 
+        panel.grid = element_blank(),
+        axis.title.x = element_blank())
+  
+```
+
