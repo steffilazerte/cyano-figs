@@ -8,4 +8,4 @@ List of figures for the cyano book
 - [TP vs. everything](figures.html)
 - [HF vs. PNI](hf.html)
 - [TP and Chlorophyll by month](monthly.html)
-- [Lake Erie](errie.html)
+- [Lake Erie](erie.html)
