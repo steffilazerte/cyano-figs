@@ -1,0 +1,118 @@
+---
+title: "Fig 5.3 Lake Erie"
+format: html
+---
+
+## Setup
+```{r}
+#| message: false
+
+knitr::opts_chunk$set(out.width = "60%", fig.width = 5, fig.height = 4)
+
+library(tidyverse)
+library(readxl)
+library(janitor)
+library(patchwork)
+library(ggrepel)
+
+d <- read_excel("Data/Fig_5_3_Erie.xlsx", skip = 2) |>
+  clean_names() |>
+  rename("int_load" = 2, "chl" = 3, "abun" = 4) |>
+  mutate(abun = abun + 1)
+
+blu <- "blue3" # Standard point colour
+```
+
+## Stats
+
+:::{.panel-tabset}
+
+### Summary
+```{r}
+m1 <- lm(log10(chl) ~ int_load, data = d)
+summary(m1)
+
+m2 <- lm(log10(abun) ~ int_load, data = d)
+summary(m2)
+```
+
+### Checks
+```{r}
+DHARMa::simulateResiduals(m1, plot = TRUE)
+DHARMa::simulateResiduals(m2, plot = TRUE)
+```
+:::
+
+
+
+## Figure
+
+```{r}
+#| fig-width: 7
+#| fig-height: 8
+#| fig-dpi: 600
+#| out-width: 50%
+
+
+
+# y-Log base plot
+g0 <- ggplot(d, aes(x = int_load)) +
+  theme_classic(base_size = 12) +
+  theme(plot.margin = margin(), plot.tag.position = c("topleft")) +
+  scale_x_continuous(name = bquote('Internal load'~(mg/m^2/Aug-Sep)))
+  
+
+d <- mutate(
+  d, 
+  y_lab = case_when(year == 1999 ~ chl + 0.25,
+                    year == 2000 ~ chl + 0.15,
+                    year == 1995 ~ chl + 0.05,
+                    year == 1997 ~ chl + 0.1,
+                    year == 1989 ~ chl + 0.1,
+                    year == 2007 ~ chl - 0.075,
+                    year == 2011 ~ chl + 0.15,
+                    year == 2012 ~ chl + 0.7,
+                    TRUE ~ chl),
+  x_lab = case_when(year == 2012 ~ int_load - 15, 
+                    TRUE ~ int_load))
+
+g1 <- g0 + 
+  stat_smooth(aes(y = chl), method = "lm", se = TRUE, na.rm = TRUE, colour = "black") +
+  geom_point(aes(y = chl), colour = blu) +
+  geom_text(data = d, aes(x = x_lab, y = y_lab, label = year), size = 3.2, colour = "white", fontface = "bold", 
+            vjust = 1, hjust = -0.15) +
+  geom_text(data = d, aes(x = x_lab, y = y_lab, label = year), size = 3, vjust = 1, hjust = -0.2) +
+  scale_y_log10(breaks = c(0.1, 1, 10)) +
+  labs(y = bquote("Chlorophyll"~(mu*g/L))) +
+  annotation_logticks(sides = "l")
+
+
+d <- mutate(
+  d, 
+  y_lab = case_when(year == 2011 ~ abun + 1,
+                    year == 2005 ~ abun - 1,
+                    year == 2009 ~ abun + 1.7,
+                    year == 2008 ~ abun + 0.2,
+                    year == 1987 ~ abun + 5,
+                    year == 1989 ~ abun + 1,
+                    year == 2000 ~ abun + 1.5,
+                    year == 2007 ~ abun + 0.5,
+                    year == 1995 ~ abun + 0.25,
+                    year == 1995 ~ abun + 0.25,
+                    TRUE ~ abun),
+  x_lab = case_when(year == 2012 ~ int_load - 18, 
+                    TRUE ~ int_load))
+g2 <- g0 + 
+  stat_smooth(aes(y = abun), method = "lm", se = TRUE, na.rm = TRUE, colour = "black") +
+  scale_y_log10(breaks = c(1, 10, 100)) +
+  geom_point(aes(y = abun), colour = blu) +
+  geom_text(data = d, aes(x = x_lab, y = y_lab, label = year), size = 3.2, colour = "white", fontface = "bold", 
+            vjust = 1, hjust = -0.15) +
+  geom_text(data = d, aes(x = x_lab, y = y_lab, label = year), size = 3, vjust = 1, hjust = -0.2) +
+  labs(y = bquote("Cyanbacteria abundance"~(ASU/mL))) +
+  annotation_logticks(sides = "l")
+
+g1 / g2 + plot_layout(axis_titles = "collect") + plot_annotation(tag_levels = "A")
+```
+
+
