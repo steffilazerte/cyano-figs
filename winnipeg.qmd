@@ -1,0 +1,112 @@
+---
+title: "Fig 5.3.11 Lake Winnipeg"
+format: html
+---
+
+## Setup
+```{r}
+#| message: false
+
+knitr::opts_chunk$set(out.width = "60%", fig.width = 5, fig.height = 4)
+
+library(tidyverse)
+library(readxl)
+library(janitor)
+library(patchwork)
+library(ggrepel)
+library(ggtext)
+
+d1 <- read_excel("Data/FIg. 5.3_11 Winnipeg.xlsx", skip = 2) |>
+  clean_names() |>
+  select("year", "int_load" = "whole", "share" = "south") |>
+  drop_na()
+
+d2 <- read_excel("Data/FIg. 5.3_11 Winnipeg.xlsx", skip = 1, sheet = 2) |>
+  clean_names() |>
+  select("year", "tp" = 2, "chl" = 3)
+
+blu <- "blue3" # Standard point colour
+```
+
+## Stats
+
+:::{.panel-tabset}
+
+### Summary
+```{r}
+m1 <- lm(share ~ int_load, data = d1)
+summary(m1)
+
+m2 <- lm(chl ~ tp, data = d2)
+summary(m2)
+
+stats <- tibble(model = list(m1, m2),
+                names = c("share", "chl")) |>
+  mutate(r2 = map_dbl(model, \(x) summary(x)$r.squared),
+         r2 = format(round(r2, 2)),
+         n = map_int(model, \(x) length(summary(x)$residuals)),
+         p = map_dbl(model, \(x) summary(x)$coefficients[2,4]),
+         p = if_else(p <= 0.01, "<0.01", paste0("==", round(p, 2))),
+         label = paste0("n==", n, "*','~R^2=='", r2, "'*','~p", p))
+```
+
+### Checks
+```{r}
+DHARMa::simulateResiduals(m1, plot = TRUE)
+DHARMa::simulateResiduals(m2, plot = TRUE)
+```
+:::
+
+
+
+## Figure
+
+```{r}
+#| fig-width: 5.5
+#| fig-height: 3.5
+#| fig-dpi: 600
+#| out-width: 50%
+
+d1$x <- d1$int_load
+d1$x[d1$year == 2005] <- d1$x[d1$year == 2005] * 0.925
+
+ggplot(d1, aes(x = int_load, y = share)) +
+  theme_classic(base_size = 12) +
+  theme(plot.margin = margin(), plot.tag.position = c("topleft")) +
+  scale_x_continuous(name = bquote('In situ internal load'~(mg/m^2/yr))) +
+  stat_smooth(method = "lm", colour = "black") +
+  geom_point(colour = blu) +
+  geom_text(aes(label = year, x = x), 
+            size = 3.2, colour = "white", fontface = "bold", 
+            vjust = 1, hjust = -0.15) +
+  geom_text(aes(label = year, x = x), size = 3, vjust = 1, hjust = -0.2) +
+  scale_y_continuous(name = "Share of Cyanobacteria", labels = scales::percent,
+                     breaks = seq(0, 1, 0.2)) +
+  coord_cartesian(ylim = c(0, 1)) +
+  annotate(geom = "text", x = min(d1$int_load), y = Inf, hjust = 0, vjust = 1.1, 
+           label = stats$label[stats$names == "share"], parse = TRUE)
+
+d2$x <- d2$tp
+d2$x[d2$year == 2006] <- d2$x[d2$year == 2006] * 0.95
+d2$x[d2$year == 2005] <- d2$x[d2$year == 2005] * 0.91
+d2$x[d2$year == 2004] <- d2$x[d2$year == 2004] * 0.90
+d2$y <- d2$chl
+d2$y[d2$year == 2004] <- d2$y[d2$year == 2004] * 1.06
+d2$y[d2$year == 2005] <- d2$y[d2$year == 2005] * 1.06
+
+ggplot(d2, aes(x = tp, y = chl)) +
+  theme_classic(base_size = 12) +
+  theme(plot.margin = margin(), plot.tag.position = c("topleft")) +
+  scale_x_continuous(name = bquote('South Basin TP'~(mg/L)~'under ice'),
+                     breaks = seq(0.04, 0.11, 0.01)) +
+  stat_smooth(method = "lm", colour = "black") +
+  geom_point(colour = blu) +
+  geom_text(aes(label = year, x = x, y = y), 
+            size = 3.2, colour = "white", fontface = "bold", 
+            vjust = 1, hjust = -0.15) +
+  geom_text(aes(label = year, x = x, y = y), size = 3, vjust = 1, hjust = -0.2) +
+  scale_y_continuous(name = bquote("Chlorophyll"~(µg/L))) +
+  annotate(geom = "text", x = min(d2$tp, na.rm = TRUE), y = Inf, hjust = 0, vjust = 1.1, 
+           label = stats$label[stats$names == "chl"], parse = TRUE)
+
+```

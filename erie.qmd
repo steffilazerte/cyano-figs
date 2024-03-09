@@ -14,10 +14,11 @@ library(readxl)
 library(janitor)
 library(patchwork)
 library(ggrepel)
+library(ggtext)
 
-d <- read_excel("Data/Fig_5_3_Erie.xlsx", skip = 2) |>
+d <- read_excel("Data/Steff Fig 5.3 Erie_3.xlsx", skip = 2) |>
   clean_names() |>
-  rename("int_load" = 2, "chl" = 3, "abun" = 4) |>
+  select("year", "int_load" = 2, "chl" = 3, "abun" = 4, "index" = 6) |>
   mutate(abun = abun + 1)
 
 blu <- "blue3" # Standard point colour
@@ -34,12 +35,25 @@ summary(m1)
 
 m2 <- lm(log10(abun) ~ int_load, data = d)
 summary(m2)
+
+m3 <- lm(index ~ int_load, data = d)
+summary(m3)
+
+stats <- tibble(model = list(m1, m2, m3),
+                names = c("chl", "abun", "index")) |>
+  mutate(r2 = map_dbl(model, \(x) summary(x)$r.squared),
+         r2 = format(round(r2, 2)),
+         n = map_int(model, \(x) length(summary(x)$residuals)),
+         p = map_dbl(model, \(x) summary(x)$coefficients[2,4]),
+         p = if_else(p <= 0.01, "<0.01", paste0("==", round(p, 2))),
+         label = paste0("n==", n, "*','~R^2=='", r2, "'*','~p", p))
 ```
 
 ### Checks
 ```{r}
 DHARMa::simulateResiduals(m1, plot = TRUE)
 DHARMa::simulateResiduals(m2, plot = TRUE)
+DHARMa::simulateResiduals(m3, plot = TRUE)
 ```
 :::
 
@@ -49,7 +63,7 @@ DHARMa::simulateResiduals(m2, plot = TRUE)
 
 ```{r}
 #| fig-width: 7
-#| fig-height: 8
+#| fig-height: 10
 #| fig-dpi: 600
 #| out-width: 50%
 
@@ -84,7 +98,9 @@ g1 <- g0 +
   geom_text(data = d, aes(x = x_lab, y = y_lab, label = year), size = 3, vjust = 1, hjust = -0.2) +
   scale_y_log10(breaks = c(0.1, 1, 10)) +
   labs(y = bquote("Chlorophyll"~(mu*g/L))) +
-  annotation_logticks(sides = "l")
+  annotation_logticks(sides = "l") +
+  annotate(geom = "text", x = 0, y = Inf, hjust = 0, vjust = 1.1, 
+           label = stats$label[stats$names == "chl"], parse = TRUE)
 
 
 d <- mutate(
@@ -110,9 +126,32 @@ g2 <- g0 +
             vjust = 1, hjust = -0.15) +
   geom_text(data = d, aes(x = x_lab, y = y_lab, label = year), size = 3, vjust = 1, hjust = -0.2) +
   labs(y = bquote("Cyanbacteria abundance"~(ASU/mL))) +
-  annotation_logticks(sides = "l")
+  annotation_logticks(sides = "l") +
+  annotate(geom = "text", x = 0, y = Inf, hjust = 0, vjust = 1.1, 
+           label = stats$label[stats$names == "abun"], parse = TRUE)
 
-g1 / g2 + plot_layout(axis_titles = "collect") + plot_annotation(tag_levels = "A")
+
+d <- mutate(
+   d, 
+   y_lab = case_when(
+      year == 2004 ~ index + 0.25,
+      year == 2006 ~ index + 0.25,
+      year == 2007 ~ index + 0.15,
+     TRUE ~ index),
+   x_lab = int_load)
+
+g3 <- g0 + 
+  stat_smooth(aes(y = index), method = "lm", se = TRUE, na.rm = TRUE, colour = "black") +
+  scale_y_continuous(breaks = 1:5) +
+  geom_point(aes(y = index), colour = blu) +
+  geom_text(data = d, aes(x = x_lab, y = y_lab, label = year), size = 3.2, colour = "white", fontface = "bold", 
+            vjust = 1, hjust = -0.15) +
+  geom_text(data = d, aes(x = x_lab, y = y_lab, label = year), size = 3, vjust = 1, hjust = -0.2) +
+  labs(y = "Cyanbacteria Index") +
+  annotate(geom = "text", x = 0, y = Inf, hjust = 0, vjust = 1.1, 
+           label = stats$label[stats$names == "index"], parse = TRUE)
+
+g1 / g2 / g3 + plot_layout(axis_titles = "collect") + plot_annotation(tag_levels = "A")
 ```
 
 

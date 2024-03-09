@@ -106,13 +106,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor)</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggrepel)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"Data/Fig_5_3_Erie.xlsx"</span>, <span class="at">skip =</span> <span class="dv">2</span>) <span class="sc">|&gt;</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>() <span class="sc">|&gt;</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"int_load"</span> <span class="ot">=</span> <span class="dv">2</span>, <span class="st">"chl"</span> <span class="ot">=</span> <span class="dv">3</span>, <span class="st">"abun"</span> <span class="ot">=</span> <span class="dv">4</span>) <span class="sc">|&gt;</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">abun =</span> abun <span class="sc">+</span> <span class="dv">1</span>)</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>blu <span class="ot">&lt;-</span> <span class="st">"blue3"</span> <span class="co"># Standard point colour</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggtext)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"Data/Steff Fig 5.3 Erie_3.xlsx"</span>, <span class="at">skip =</span> <span class="dv">2</span>) <span class="sc">|&gt;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>() <span class="sc">|&gt;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">"year"</span>, <span class="st">"int_load"</span> <span class="ot">=</span> <span class="dv">2</span>, <span class="st">"chl"</span> <span class="ot">=</span> <span class="dv">3</span>, <span class="st">"abun"</span> <span class="ot">=</span> <span class="dv">4</span>, <span class="st">"index"</span> <span class="ot">=</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">abun =</span> abun <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>blu <span class="ot">&lt;-</span> <span class="st">"blue3"</span> <span class="co"># Standard point colour</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="stats" class="level2">
@@ -166,11 +167,42 @@ Residual standard error: 0.4696 on 26 degrees of freedom
 Multiple R-squared:  0.3476,    Adjusted R-squared:  0.3226 
 F-statistic: 13.86 on 1 and 26 DF,  p-value: 0.0009603</code></pre>
 </div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>m3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(index <span class="sc">~</span> int_load, <span class="at">data =</span> d)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = index ~ int_load, data = d)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-1.1453 -0.4889 -0.2253  0.5339  1.3404 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)   
+(Intercept) -0.190337   0.649628  -0.293  0.77617   
+int_load     0.020565   0.005647   3.642  0.00539 **
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.8498 on 9 degrees of freedom
+  (17 observations deleted due to missingness)
+Multiple R-squared:  0.5957,    Adjusted R-squared:  0.5508 
+F-statistic: 13.26 on 1 and 9 DF,  p-value: 0.005386</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>stats <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">model =</span> <span class="fu">list</span>(m1, m2, m3),</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">names =</span> <span class="fu">c</span>(<span class="st">"chl"</span>, <span class="st">"abun"</span>, <span class="st">"index"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">r2 =</span> <span class="fu">map_dbl</span>(model, \(x) <span class="fu">summary</span>(x)<span class="sc">$</span>r.squared),</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">r2 =</span> <span class="fu">format</span>(<span class="fu">round</span>(r2, <span class="dv">2</span>)),</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">n =</span> <span class="fu">map_int</span>(model, \(x) <span class="fu">length</span>(<span class="fu">summary</span>(x)<span class="sc">$</span>residuals)),</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">p =</span> <span class="fu">map_dbl</span>(model, \(x) <span class="fu">summary</span>(x)<span class="sc">$</span>coefficients[<span class="dv">2</span>,<span class="dv">4</span>]),</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">p =</span> <span class="fu">if_else</span>(p <span class="sc">&lt;=</span> <span class="fl">0.01</span>, <span class="st">"&lt;0.01"</span>, <span class="fu">paste0</span>(<span class="st">"=="</span>, <span class="fu">round</span>(p, <span class="dv">2</span>))),</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">label =</span> <span class="fu">paste0</span>(<span class="st">"n=="</span>, n, <span class="st">"*','~R^2=='"</span>, r2, <span class="st">"'*','~p"</span>, p))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>DHARMa<span class="sc">::</span><span class="fu">simulateResiduals</span>(m1, <span class="at">plot =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>DHARMa<span class="sc">::</span><span class="fu">simulateResiduals</span>(m1, <span class="at">plot =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -183,7 +215,7 @@ F-statistic: 13.86 on 1 and 26 DF,  p-value: 0.0009603</code></pre>
  
 Scaled residual values: 0.696 0.836 0.88 0.988 0.696 0.168 0.088 0.14 0.82 0.1 0.132 0.824 0.164 0.22 0.616 0.66 0.208 0.392 0.08 0.512 ...</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>DHARMa<span class="sc">::</span><span class="fu">simulateResiduals</span>(m2, <span class="at">plot =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>DHARMa<span class="sc">::</span><span class="fu">simulateResiduals</span>(m2, <span class="at">plot =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -196,6 +228,19 @@ Scaled residual values: 0.696 0.836 0.88 0.988 0.696 0.168 0.088 0.14 0.82 0.1 0
  
 Scaled residual values: 0.952 0.928 0.564 0.736 0.604 0.056 0.32 0.116 0.428 0.208 0.288 0.456 0.084 0.112 0.352 0.664 0.564 0.908 0.104 0.828 ...</code></pre>
 </div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>DHARMa<span class="sc">::</span><span class="fu">simulateResiduals</span>(m3, <span class="at">plot =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="erie_files/figure-html/unnamed-chunk-3-3.png" class="img-fluid figure-img" style="width:60.0%"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Object of Class DHARMa with simulated residuals based on 250 simulations with refit = FALSE . See ?DHARMa::simulateResiduals for help. 
+ 
+Scaled residual values: 0.808 0.336 0.324 0.092 0.62 0.14 0.396 0.26 0.952 0.928 0.52</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -204,67 +249,103 @@ Scaled residual values: 0.952 0.928 0.564 0.736 0.604 0.056 0.32 0.116 0.428 0.2
 <section id="figure" class="level2">
 <h2 class="anchored" data-anchor-id="figure">Figure</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># y-Log base plot</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>g0 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(d, <span class="fu">aes</span>(<span class="at">x =</span> int_load)) <span class="sc">+</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.margin =</span> <span class="fu">margin</span>(), <span class="at">plot.tag.position =</span> <span class="fu">c</span>(<span class="st">"topleft"</span>)) <span class="sc">+</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name =</span> <span class="fu">bquote</span>(<span class="st">'Internal load'</span><span class="sc">~</span>(mg<span class="sc">/</span>m<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>Aug<span class="sc">-</span>Sep)))</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">mutate</span>(</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  d, </span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">y_lab =</span> <span class="fu">case_when</span>(year <span class="sc">==</span> <span class="dv">1999</span> <span class="sc">~</span> chl <span class="sc">+</span> <span class="fl">0.25</span>,</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>                    year <span class="sc">==</span> <span class="dv">2000</span> <span class="sc">~</span> chl <span class="sc">+</span> <span class="fl">0.15</span>,</span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>                    year <span class="sc">==</span> <span class="dv">1995</span> <span class="sc">~</span> chl <span class="sc">+</span> <span class="fl">0.05</span>,</span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>                    year <span class="sc">==</span> <span class="dv">1997</span> <span class="sc">~</span> chl <span class="sc">+</span> <span class="fl">0.1</span>,</span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>                    year <span class="sc">==</span> <span class="dv">1989</span> <span class="sc">~</span> chl <span class="sc">+</span> <span class="fl">0.1</span>,</span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>                    year <span class="sc">==</span> <span class="dv">2007</span> <span class="sc">~</span> chl <span class="sc">-</span> <span class="fl">0.075</span>,</span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>                    year <span class="sc">==</span> <span class="dv">2011</span> <span class="sc">~</span> chl <span class="sc">+</span> <span class="fl">0.15</span>,</span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>                    year <span class="sc">==</span> <span class="dv">2012</span> <span class="sc">~</span> chl <span class="sc">+</span> <span class="fl">0.7</span>,</span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>                    <span class="cn">TRUE</span> <span class="sc">~</span> chl),</span>
-<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">x_lab =</span> <span class="fu">case_when</span>(year <span class="sc">==</span> <span class="dv">2012</span> <span class="sc">~</span> int_load <span class="sc">-</span> <span class="dv">15</span>, </span>
-<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>                    <span class="cn">TRUE</span> <span class="sc">~</span> int_load))</span>
-<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>g1 <span class="ot">&lt;-</span> g0 <span class="sc">+</span> </span>
-<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="fu">aes</span>(<span class="at">y =</span> chl), <span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">TRUE</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">colour =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> chl), <span class="at">colour =</span> blu) <span class="sc">+</span></span>
-<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> d, <span class="fu">aes</span>(<span class="at">x =</span> x_lab, <span class="at">y =</span> y_lab, <span class="at">label =</span> year), <span class="at">size =</span> <span class="fl">3.2</span>, <span class="at">colour =</span> <span class="st">"white"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>, </span>
-<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>            <span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.15</span>) <span class="sc">+</span></span>
-<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> d, <span class="fu">aes</span>(<span class="at">x =</span> x_lab, <span class="at">y =</span> y_lab, <span class="at">label =</span> year), <span class="at">size =</span> <span class="dv">3</span>, <span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.2</span>) <span class="sc">+</span></span>
-<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="dv">1</span>, <span class="dv">10</span>)) <span class="sc">+</span></span>
-<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="fu">bquote</span>(<span class="st">"Chlorophyll"</span><span class="sc">~</span>(mu<span class="sc">*</span>g<span class="sc">/</span>L))) <span class="sc">+</span></span>
-<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotation_logticks</span>(<span class="at">sides =</span> <span class="st">"l"</span>)</span>
-<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">mutate</span>(</span>
-<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>  d, </span>
-<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">y_lab =</span> <span class="fu">case_when</span>(year <span class="sc">==</span> <span class="dv">2011</span> <span class="sc">~</span> abun <span class="sc">+</span> <span class="dv">1</span>,</span>
-<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>                    year <span class="sc">==</span> <span class="dv">2005</span> <span class="sc">~</span> abun <span class="sc">-</span> <span class="dv">1</span>,</span>
-<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>                    year <span class="sc">==</span> <span class="dv">2009</span> <span class="sc">~</span> abun <span class="sc">+</span> <span class="fl">1.7</span>,</span>
-<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>                    year <span class="sc">==</span> <span class="dv">2008</span> <span class="sc">~</span> abun <span class="sc">+</span> <span class="fl">0.2</span>,</span>
-<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>                    year <span class="sc">==</span> <span class="dv">1987</span> <span class="sc">~</span> abun <span class="sc">+</span> <span class="dv">5</span>,</span>
-<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>                    year <span class="sc">==</span> <span class="dv">1989</span> <span class="sc">~</span> abun <span class="sc">+</span> <span class="dv">1</span>,</span>
-<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>                    year <span class="sc">==</span> <span class="dv">2000</span> <span class="sc">~</span> abun <span class="sc">+</span> <span class="fl">1.5</span>,</span>
-<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>                    year <span class="sc">==</span> <span class="dv">2007</span> <span class="sc">~</span> abun <span class="sc">+</span> <span class="fl">0.5</span>,</span>
-<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a>                    year <span class="sc">==</span> <span class="dv">1995</span> <span class="sc">~</span> abun <span class="sc">+</span> <span class="fl">0.25</span>,</span>
-<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a>                    year <span class="sc">==</span> <span class="dv">1995</span> <span class="sc">~</span> abun <span class="sc">+</span> <span class="fl">0.25</span>,</span>
-<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>                    <span class="cn">TRUE</span> <span class="sc">~</span> abun),</span>
-<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a>  <span class="at">x_lab =</span> <span class="fu">case_when</span>(year <span class="sc">==</span> <span class="dv">2012</span> <span class="sc">~</span> int_load <span class="sc">-</span> <span class="dv">18</span>, </span>
-<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a>                    <span class="cn">TRUE</span> <span class="sc">~</span> int_load))</span>
-<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a>g2 <span class="ot">&lt;-</span> g0 <span class="sc">+</span> </span>
-<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="fu">aes</span>(<span class="at">y =</span> abun), <span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">TRUE</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">colour =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">10</span>, <span class="dv">100</span>)) <span class="sc">+</span></span>
-<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> abun), <span class="at">colour =</span> blu) <span class="sc">+</span></span>
-<span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> d, <span class="fu">aes</span>(<span class="at">x =</span> x_lab, <span class="at">y =</span> y_lab, <span class="at">label =</span> year), <span class="at">size =</span> <span class="fl">3.2</span>, <span class="at">colour =</span> <span class="st">"white"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>, </span>
-<span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a>            <span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.15</span>) <span class="sc">+</span></span>
-<span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> d, <span class="fu">aes</span>(<span class="at">x =</span> x_lab, <span class="at">y =</span> y_lab, <span class="at">label =</span> year), <span class="at">size =</span> <span class="dv">3</span>, <span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.2</span>) <span class="sc">+</span></span>
-<span id="cb10-55"><a href="#cb10-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="fu">bquote</span>(<span class="st">"Cyanbacteria abundance"</span><span class="sc">~</span>(ASU<span class="sc">/</span>mL))) <span class="sc">+</span></span>
-<span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotation_logticks</span>(<span class="at">sides =</span> <span class="st">"l"</span>)</span>
-<span id="cb10-57"><a href="#cb10-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-58"><a href="#cb10-58" aria-hidden="true" tabindex="-1"></a>g1 <span class="sc">/</span> g2 <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">axis_titles =</span> <span class="st">"collect"</span>) <span class="sc">+</span> <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">"A"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># y-Log base plot</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>g0 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(d, <span class="fu">aes</span>(<span class="at">x =</span> int_load)) <span class="sc">+</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.margin =</span> <span class="fu">margin</span>(), <span class="at">plot.tag.position =</span> <span class="fu">c</span>(<span class="st">"topleft"</span>)) <span class="sc">+</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name =</span> <span class="fu">bquote</span>(<span class="st">'Internal load'</span><span class="sc">~</span>(mg<span class="sc">/</span>m<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>Aug<span class="sc">-</span>Sep)))</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">mutate</span>(</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  d, </span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">y_lab =</span> <span class="fu">case_when</span>(year <span class="sc">==</span> <span class="dv">1999</span> <span class="sc">~</span> chl <span class="sc">+</span> <span class="fl">0.25</span>,</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>                    year <span class="sc">==</span> <span class="dv">2000</span> <span class="sc">~</span> chl <span class="sc">+</span> <span class="fl">0.15</span>,</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>                    year <span class="sc">==</span> <span class="dv">1995</span> <span class="sc">~</span> chl <span class="sc">+</span> <span class="fl">0.05</span>,</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>                    year <span class="sc">==</span> <span class="dv">1997</span> <span class="sc">~</span> chl <span class="sc">+</span> <span class="fl">0.1</span>,</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>                    year <span class="sc">==</span> <span class="dv">1989</span> <span class="sc">~</span> chl <span class="sc">+</span> <span class="fl">0.1</span>,</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>                    year <span class="sc">==</span> <span class="dv">2007</span> <span class="sc">~</span> chl <span class="sc">-</span> <span class="fl">0.075</span>,</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>                    year <span class="sc">==</span> <span class="dv">2011</span> <span class="sc">~</span> chl <span class="sc">+</span> <span class="fl">0.15</span>,</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>                    year <span class="sc">==</span> <span class="dv">2012</span> <span class="sc">~</span> chl <span class="sc">+</span> <span class="fl">0.7</span>,</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>                    <span class="cn">TRUE</span> <span class="sc">~</span> chl),</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">x_lab =</span> <span class="fu">case_when</span>(year <span class="sc">==</span> <span class="dv">2012</span> <span class="sc">~</span> int_load <span class="sc">-</span> <span class="dv">15</span>, </span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>                    <span class="cn">TRUE</span> <span class="sc">~</span> int_load))</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>g1 <span class="ot">&lt;-</span> g0 <span class="sc">+</span> </span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="fu">aes</span>(<span class="at">y =</span> chl), <span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">TRUE</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">colour =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> chl), <span class="at">colour =</span> blu) <span class="sc">+</span></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> d, <span class="fu">aes</span>(<span class="at">x =</span> x_lab, <span class="at">y =</span> y_lab, <span class="at">label =</span> year), <span class="at">size =</span> <span class="fl">3.2</span>, <span class="at">colour =</span> <span class="st">"white"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>, </span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>            <span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.15</span>) <span class="sc">+</span></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> d, <span class="fu">aes</span>(<span class="at">x =</span> x_lab, <span class="at">y =</span> y_lab, <span class="at">label =</span> year), <span class="at">size =</span> <span class="dv">3</span>, <span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="dv">1</span>, <span class="dv">10</span>)) <span class="sc">+</span></span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="fu">bquote</span>(<span class="st">"Chlorophyll"</span><span class="sc">~</span>(mu<span class="sc">*</span>g<span class="sc">/</span>L))) <span class="sc">+</span></span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotation_logticks</span>(<span class="at">sides =</span> <span class="st">"l"</span>) <span class="sc">+</span></span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"text"</span>, <span class="at">x =</span> <span class="dv">0</span>, <span class="at">y =</span> <span class="cn">Inf</span>, <span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">vjust =</span> <span class="fl">1.1</span>, </span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>           <span class="at">label =</span> stats<span class="sc">$</span>label[stats<span class="sc">$</span>names <span class="sc">==</span> <span class="st">"chl"</span>], <span class="at">parse =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">mutate</span>(</span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a>  d, </span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">y_lab =</span> <span class="fu">case_when</span>(year <span class="sc">==</span> <span class="dv">2011</span> <span class="sc">~</span> abun <span class="sc">+</span> <span class="dv">1</span>,</span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a>                    year <span class="sc">==</span> <span class="dv">2005</span> <span class="sc">~</span> abun <span class="sc">-</span> <span class="dv">1</span>,</span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a>                    year <span class="sc">==</span> <span class="dv">2009</span> <span class="sc">~</span> abun <span class="sc">+</span> <span class="fl">1.7</span>,</span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a>                    year <span class="sc">==</span> <span class="dv">2008</span> <span class="sc">~</span> abun <span class="sc">+</span> <span class="fl">0.2</span>,</span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a>                    year <span class="sc">==</span> <span class="dv">1987</span> <span class="sc">~</span> abun <span class="sc">+</span> <span class="dv">5</span>,</span>
+<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a>                    year <span class="sc">==</span> <span class="dv">1989</span> <span class="sc">~</span> abun <span class="sc">+</span> <span class="dv">1</span>,</span>
+<span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a>                    year <span class="sc">==</span> <span class="dv">2000</span> <span class="sc">~</span> abun <span class="sc">+</span> <span class="fl">1.5</span>,</span>
+<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a>                    year <span class="sc">==</span> <span class="dv">2007</span> <span class="sc">~</span> abun <span class="sc">+</span> <span class="fl">0.5</span>,</span>
+<span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a>                    year <span class="sc">==</span> <span class="dv">1995</span> <span class="sc">~</span> abun <span class="sc">+</span> <span class="fl">0.25</span>,</span>
+<span id="cb15-46"><a href="#cb15-46" aria-hidden="true" tabindex="-1"></a>                    year <span class="sc">==</span> <span class="dv">1995</span> <span class="sc">~</span> abun <span class="sc">+</span> <span class="fl">0.25</span>,</span>
+<span id="cb15-47"><a href="#cb15-47" aria-hidden="true" tabindex="-1"></a>                    <span class="cn">TRUE</span> <span class="sc">~</span> abun),</span>
+<span id="cb15-48"><a href="#cb15-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">x_lab =</span> <span class="fu">case_when</span>(year <span class="sc">==</span> <span class="dv">2012</span> <span class="sc">~</span> int_load <span class="sc">-</span> <span class="dv">18</span>, </span>
+<span id="cb15-49"><a href="#cb15-49" aria-hidden="true" tabindex="-1"></a>                    <span class="cn">TRUE</span> <span class="sc">~</span> int_load))</span>
+<span id="cb15-50"><a href="#cb15-50" aria-hidden="true" tabindex="-1"></a>g2 <span class="ot">&lt;-</span> g0 <span class="sc">+</span> </span>
+<span id="cb15-51"><a href="#cb15-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="fu">aes</span>(<span class="at">y =</span> abun), <span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">TRUE</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">colour =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb15-52"><a href="#cb15-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">10</span>, <span class="dv">100</span>)) <span class="sc">+</span></span>
+<span id="cb15-53"><a href="#cb15-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> abun), <span class="at">colour =</span> blu) <span class="sc">+</span></span>
+<span id="cb15-54"><a href="#cb15-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> d, <span class="fu">aes</span>(<span class="at">x =</span> x_lab, <span class="at">y =</span> y_lab, <span class="at">label =</span> year), <span class="at">size =</span> <span class="fl">3.2</span>, <span class="at">colour =</span> <span class="st">"white"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>, </span>
+<span id="cb15-55"><a href="#cb15-55" aria-hidden="true" tabindex="-1"></a>            <span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.15</span>) <span class="sc">+</span></span>
+<span id="cb15-56"><a href="#cb15-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> d, <span class="fu">aes</span>(<span class="at">x =</span> x_lab, <span class="at">y =</span> y_lab, <span class="at">label =</span> year), <span class="at">size =</span> <span class="dv">3</span>, <span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb15-57"><a href="#cb15-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="fu">bquote</span>(<span class="st">"Cyanbacteria abundance"</span><span class="sc">~</span>(ASU<span class="sc">/</span>mL))) <span class="sc">+</span></span>
+<span id="cb15-58"><a href="#cb15-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotation_logticks</span>(<span class="at">sides =</span> <span class="st">"l"</span>) <span class="sc">+</span></span>
+<span id="cb15-59"><a href="#cb15-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"text"</span>, <span class="at">x =</span> <span class="dv">0</span>, <span class="at">y =</span> <span class="cn">Inf</span>, <span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">vjust =</span> <span class="fl">1.1</span>, </span>
+<span id="cb15-60"><a href="#cb15-60" aria-hidden="true" tabindex="-1"></a>           <span class="at">label =</span> stats<span class="sc">$</span>label[stats<span class="sc">$</span>names <span class="sc">==</span> <span class="st">"abun"</span>], <span class="at">parse =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb15-61"><a href="#cb15-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-62"><a href="#cb15-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-63"><a href="#cb15-63" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">mutate</span>(</span>
+<span id="cb15-64"><a href="#cb15-64" aria-hidden="true" tabindex="-1"></a>   d, </span>
+<span id="cb15-65"><a href="#cb15-65" aria-hidden="true" tabindex="-1"></a>   <span class="at">y_lab =</span> <span class="fu">case_when</span>(</span>
+<span id="cb15-66"><a href="#cb15-66" aria-hidden="true" tabindex="-1"></a>      year <span class="sc">==</span> <span class="dv">2004</span> <span class="sc">~</span> index <span class="sc">+</span> <span class="fl">0.25</span>,</span>
+<span id="cb15-67"><a href="#cb15-67" aria-hidden="true" tabindex="-1"></a>      year <span class="sc">==</span> <span class="dv">2006</span> <span class="sc">~</span> index <span class="sc">+</span> <span class="fl">0.25</span>,</span>
+<span id="cb15-68"><a href="#cb15-68" aria-hidden="true" tabindex="-1"></a>      year <span class="sc">==</span> <span class="dv">2007</span> <span class="sc">~</span> index <span class="sc">+</span> <span class="fl">0.15</span>,</span>
+<span id="cb15-69"><a href="#cb15-69" aria-hidden="true" tabindex="-1"></a>     <span class="cn">TRUE</span> <span class="sc">~</span> index),</span>
+<span id="cb15-70"><a href="#cb15-70" aria-hidden="true" tabindex="-1"></a>   <span class="at">x_lab =</span> int_load)</span>
+<span id="cb15-71"><a href="#cb15-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-72"><a href="#cb15-72" aria-hidden="true" tabindex="-1"></a>g3 <span class="ot">&lt;-</span> g0 <span class="sc">+</span> </span>
+<span id="cb15-73"><a href="#cb15-73" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="fu">aes</span>(<span class="at">y =</span> index), <span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">TRUE</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">colour =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb15-74"><a href="#cb15-74" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb15-75"><a href="#cb15-75" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> index), <span class="at">colour =</span> blu) <span class="sc">+</span></span>
+<span id="cb15-76"><a href="#cb15-76" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> d, <span class="fu">aes</span>(<span class="at">x =</span> x_lab, <span class="at">y =</span> y_lab, <span class="at">label =</span> year), <span class="at">size =</span> <span class="fl">3.2</span>, <span class="at">colour =</span> <span class="st">"white"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>, </span>
+<span id="cb15-77"><a href="#cb15-77" aria-hidden="true" tabindex="-1"></a>            <span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.15</span>) <span class="sc">+</span></span>
+<span id="cb15-78"><a href="#cb15-78" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> d, <span class="fu">aes</span>(<span class="at">x =</span> x_lab, <span class="at">y =</span> y_lab, <span class="at">label =</span> year), <span class="at">size =</span> <span class="dv">3</span>, <span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb15-79"><a href="#cb15-79" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"Cyanbacteria Index"</span>) <span class="sc">+</span></span>
+<span id="cb15-80"><a href="#cb15-80" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"text"</span>, <span class="at">x =</span> <span class="dv">0</span>, <span class="at">y =</span> <span class="cn">Inf</span>, <span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">vjust =</span> <span class="fl">1.1</span>, </span>
+<span id="cb15-81"><a href="#cb15-81" aria-hidden="true" tabindex="-1"></a>           <span class="at">label =</span> stats<span class="sc">$</span>label[stats<span class="sc">$</span>names <span class="sc">==</span> <span class="st">"index"</span>], <span class="at">parse =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb15-82"><a href="#cb15-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-83"><a href="#cb15-83" aria-hidden="true" tabindex="-1"></a>g1 <span class="sc">/</span> g2 <span class="sc">/</span> g3 <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">axis_titles =</span> <span class="st">"collect"</span>) <span class="sc">+</span> <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">"A"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>`geom_smooth()` using formula = 'y ~ x'
+`geom_smooth()` using formula = 'y ~ x'
 `geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 17 rows containing missing values or values outside the scale range
+(`geom_point()`).</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 17 rows containing missing values or values outside the scale range
+(`geom_text()`).
+Removed 17 rows containing missing values or values outside the scale range
+(`geom_text()`).</code></pre>
 </div>
 <div class="cell-output-display">
 <div>

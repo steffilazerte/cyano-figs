@@ -9,3 +9,5 @@ List of figures for the cyano book
 - [HF vs. PNI](hf.html)
 - [TP and Chlorophyll by month](monthly.html)
 - [Lake Erie](erie.html)
+- [Lake Winnipeg](winnipeg.html)
+- [Brownlee Reservoir](brownlee.html)
