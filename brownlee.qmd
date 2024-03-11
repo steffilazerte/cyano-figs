@@ -33,14 +33,14 @@ blu <- "blue3" # Standard point colour
 ```{r}
 #| fig-width: 5
 #| fig-height: 6
-#| fig-dpi: 600
+#| fig-dpi: 800
 #| out-width: 80%
 
 # y-Log base plot
 g0 <- ggplot(d, aes(x = rm, colour = year, shape = year, fill = year)) +
   theme_classic(base_size = 12) +
   theme(plot.margin = margin(), plot.tag.position = c("topleft")) +
-  scale_x_reverse(name = "Location (River mile)", limits = c(345, 283), breaks = seq(340, 290, -10)) +
+  scale_x_reverse(name = "Location (River Mile)", limits = c(345, 283), breaks = seq(340, 290, -10)) +
   scale_colour_manual(name = "", values = c("1999" = blu, "2000" = "deepskyblue"), aesthetics = c("fill", "colour")) +
   scale_shape_manual(name = "", values = c("1999" = 21, "2000" = 22))
 
@@ -56,7 +56,7 @@ g00 <- g0 +
   annotate(geom = "segment", arrow = arrow(type = "closed", length = unit(2, "mm")),
            x = 345, xend = 345, y = 0.35, yend = 0.1) +
   # Outflow
-  annotate(geom = "text", label = "Outflow", x = 284, y = 0.5) +
+  annotate(geom = "text", label = "Outflow", x = 284.5, y = 0.5) +
   annotate(geom = "segment", arrow = arrow(type = "closed", length = unit(2, "mm")),
            x = 284, xend = 284, y = 0.35, yend = 0.1) +
   # Depths
@@ -87,7 +87,7 @@ g3 <- g0 +
         legend.position = "inside", legend.justification = c(0.9, 1)) +
   geom_line(aes(y = chl)) +
   geom_point(aes(y = chl)) +
-  scale_y_continuous(limits = c(0, 50), name = bquote("Chlorophyl"~(mu*g/L)))
+  scale_y_continuous(limits = c(0, 50), name = bquote("Chlorophyll"~(mu*g/L)))
 
 
 gg <- g00 / g3 / g1 / g2 + plot_annotation(tag_levels = "A") +
