@@ -39,13 +39,15 @@ summary(m2)
 m3 <- lm(index ~ int_load, data = d)
 summary(m3)
 
+options("scipen" = 999)
+
 stats <- tibble(model = list(m1, m2, m3),
                 names = c("chl", "abun", "index")) |>
   mutate(r2 = map_dbl(model, \(x) summary(x)$r.squared),
          r2 = format(round(r2, 2)),
          n = map_int(model, \(x) length(summary(x)$residuals)),
          p = map_dbl(model, \(x) summary(x)$coefficients[2,4]),
-         p = if_else(p <= 0.01, "<0.01", paste0("==", round(p, 2))),
+         p = if_else(p <= 0.0001, "<0.0001", paste0("=='", str_pad(round(p, 4), 6, side = "right", pad = "0"), "'")),
          label = paste0("n==", n, "*','~R^2=='", r2, "'*','~p", p))
 ```
 
@@ -154,4 +156,21 @@ g3 <- g0 +
 g1 / g2 / g3 + plot_layout(axis_titles = "collect") + plot_annotation(tag_levels = "A")
 ```
 
+
+
+```{r}
+ggplot(d, aes(x = int_load)) +
+  theme_classic(base_size = 12) +
+  theme(plot.margin = margin(l = 5, t = 15, r = 5, b = 5), plot.background = element_rect(fill = "grey85"),
+        panel.background = element_rect(fill = "grey85")) +
+  stat_smooth(aes(y = abun), method = "lm", se = TRUE, na.rm = TRUE, colour = "black") +
+  geom_point(aes(y = abun), fill = "#506424", size = 2, shape = 21) +
+  labs(y = bquote("Cyanbacteria Abundance"~(ASU/mL))) +
+  annotation_logticks(sides = "l") +
+  scale_y_log10(breaks = c(1, 10, 100)) +
+  scale_x_continuous(name = bquote('Internal Phosphorus Load'~(mg/m^2/Aug-Sep)))
+
+ggsave("title.pdf", width = 6, height = 3.5, dpi = 1000)
+ggsave("title.png", width = 6, height = 3.5, dpi = 1000)
+```
 
