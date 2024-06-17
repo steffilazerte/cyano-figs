@@ -78,6 +78,6 @@ g2 <- g0 +
   stat_smooth(aes(y = hf_epi), method = "lm", se = TRUE, colour = "black") +
   labs(y = "Epilimnetic HF (days/yr)")
 
-g1 / g2 + plot_annotation(tag_levels = "A")
+g1 / g2 + plot_annotation(tag_levels = "A", tag_prefix = "(", tag_suffix = ")")
 ```
 

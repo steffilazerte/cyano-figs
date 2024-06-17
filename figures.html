@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.4.549">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -22,7 +22,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -111,7 +111,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
+
 </header>
+
 
 <p>This is the first pass of figures for the Cyano book. Figures are created individually and then combined into multi-part figures.</p>
 <p>For the largest figure, I show the individual panels one-by-one along with questions. Then at the end I put them together.</p>
@@ -119,7 +121,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="setup">Setup</h2>
 <p>Load packages and data, but only the data we need for these figures.</p>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">out.width =</span> <span class="st">"60%"</span>, <span class="at">fig.width =</span> <span class="dv">5</span>, <span class="at">fig.height =</span> <span class="dv">4</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -143,7 +145,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="figure-2.3">Figure 2.3</h2>
 <p>This figure only uses values where the anoxic factor is &gt; 0</p>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>fig2_3 <span class="ot">&lt;-</span> <span class="fu">filter</span>(cyano, afsum <span class="sc">&gt;</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
@@ -152,7 +154,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>morphometric ratio (osgood) = z/Ao0.5</p>
 <p>afsum = -36.2 + 50.12 * log10(tp_epi) + 0.762 * osgood</p>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>mr <span class="ot">&lt;-</span> <span class="fu">expand_grid</span>(<span class="at">osgood =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">30</span>, <span class="fl">2.5</span>), </span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">tp_epi =</span> <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">100</span>)) <span class="sc">|&gt;</span></span>
@@ -167,7 +169,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 </blockquote>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>g1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(fig2_3, <span class="fu">aes</span>(<span class="at">x =</span> tp_epi, <span class="at">y =</span> afsum)) <span class="sc">+</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
@@ -186,16 +188,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">bquote</span>(<span class="st">"Anoxic Factor"</span><span class="sc">~</span>(d<span class="sc">/</span>summer)), <span class="at">y =</span> <span class="fu">bquote</span>(<span class="st">"Morphometric ratio"</span><span class="sc">~</span>(m<span class="sc">/</span>km<span class="sc">^</span><span class="dv">2</span>)),</span>
 <span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">size =</span> <span class="st">"Tropic level"</span>)</span>
 <span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>g1 <span class="sc">+</span> g2 <span class="sc">+</span> <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">"A"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>g1 <span class="sc">+</span> g2 <span class="sc">+</span> <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">"A"</span>, <span class="at">tag_prefix =</span> <span class="st">"("</span>, <span class="at">tag_suffix =</span> <span class="st">")"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning: Removed 53 rows containing missing values (`geom_line()`).</code></pre>
+<pre><code>Warning: Removed 53 rows containing missing values or values outside the scale range
+(`geom_line()`).</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: Using size for a discrete variable is not advised.</code></pre>
 </div>
 <div class="cell-output-display">
-<p><img src="figures_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" style="width:100.0%"></p>
+<div>
+<figure class="figure">
+<p><img src="figures_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -217,7 +224,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="setup-the-data" class="level3">
 <h3 class="anchored" data-anchor-id="setup-the-data">Setup the data</h3>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>fig2_4 <span class="ot">&lt;-</span> cyano <span class="sc">|&gt;</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(tp_epi) <span class="sc">|&gt;</span></span>
@@ -228,7 +235,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="get-stats" class="level3">
 <h3 class="anchored" data-anchor-id="get-stats">Get stats</h3>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="st">"chl"</span>, <span class="st">"secchi"</span>, <span class="st">"doc"</span>, <span class="st">"color"</span>, <span class="st">"pri_proa"</span>, <span class="st">"bac"</span>, <span class="st">"coldfish"</span>, <span class="st">"fishabun"</span>),</span>
@@ -251,29 +258,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </details>
 </div>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>gt<span class="sc">::</span><span class="fu">gt</span>(<span class="fu">select</span>(s, <span class="sc">-</span>m))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-
-<div id="kxkrhjayzh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#kxkrhjayzh table {
+<div id="kcqotyxnep" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#kcqotyxnep table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#kxkrhjayzh thead, #kxkrhjayzh tbody, #kxkrhjayzh tfoot, #kxkrhjayzh tr, #kxkrhjayzh td, #kxkrhjayzh th {
+#kcqotyxnep thead, #kcqotyxnep tbody, #kcqotyxnep tfoot, #kcqotyxnep tr, #kcqotyxnep td, #kcqotyxnep th {
   border-style: none;
 }
 
-#kxkrhjayzh p {
+#kcqotyxnep p {
   margin: 0;
   padding: 0;
 }
 
-#kxkrhjayzh .gt_table {
+#kcqotyxnep .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -299,12 +305,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-left-color: #D3D3D3;
 }
 
-#kxkrhjayzh .gt_caption {
+#kcqotyxnep .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#kxkrhjayzh .gt_title {
+#kcqotyxnep .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -316,7 +322,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-width: 0;
 }
 
-#kxkrhjayzh .gt_subtitle {
+#kcqotyxnep .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -328,7 +334,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-width: 0;
 }
 
-#kxkrhjayzh .gt_heading {
+#kcqotyxnep .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -340,13 +346,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#kxkrhjayzh .gt_bottom_border {
+#kcqotyxnep .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#kxkrhjayzh .gt_col_headings {
+#kcqotyxnep .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -361,7 +367,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#kxkrhjayzh .gt_col_heading {
+#kcqotyxnep .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -381,7 +387,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#kxkrhjayzh .gt_column_spanner_outer {
+#kcqotyxnep .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -393,15 +399,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 4px;
 }
 
-#kxkrhjayzh .gt_column_spanner_outer:first-child {
+#kcqotyxnep .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#kxkrhjayzh .gt_column_spanner_outer:last-child {
+#kcqotyxnep .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#kxkrhjayzh .gt_column_spanner {
+#kcqotyxnep .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -413,11 +419,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   width: 100%;
 }
 
-#kxkrhjayzh .gt_spanner_row {
+#kcqotyxnep .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#kxkrhjayzh .gt_group_heading {
+#kcqotyxnep .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -443,7 +449,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   text-align: left;
 }
 
-#kxkrhjayzh .gt_empty_group_heading {
+#kcqotyxnep .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -458,15 +464,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: middle;
 }
 
-#kxkrhjayzh .gt_from_md > :first-child {
+#kcqotyxnep .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#kxkrhjayzh .gt_from_md > :last-child {
+#kcqotyxnep .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#kxkrhjayzh .gt_row {
+#kcqotyxnep .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -485,7 +491,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#kxkrhjayzh .gt_stub {
+#kcqotyxnep .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -498,7 +504,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#kxkrhjayzh .gt_stub_row_group {
+#kcqotyxnep .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -512,15 +518,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: top;
 }
 
-#kxkrhjayzh .gt_row_group_first td {
+#kcqotyxnep .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#kxkrhjayzh .gt_row_group_first th {
+#kcqotyxnep .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#kxkrhjayzh .gt_summary_row {
+#kcqotyxnep .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -530,16 +536,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#kxkrhjayzh .gt_first_summary_row {
+#kcqotyxnep .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#kxkrhjayzh .gt_first_summary_row.thick {
+#kcqotyxnep .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#kxkrhjayzh .gt_last_summary_row {
+#kcqotyxnep .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -549,7 +555,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#kxkrhjayzh .gt_grand_summary_row {
+#kcqotyxnep .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -559,7 +565,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#kxkrhjayzh .gt_first_grand_summary_row {
+#kcqotyxnep .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -569,7 +575,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-color: #D3D3D3;
 }
 
-#kxkrhjayzh .gt_last_grand_summary_row_top {
+#kcqotyxnep .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -579,11 +585,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#kxkrhjayzh .gt_striped {
+#kcqotyxnep .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#kxkrhjayzh .gt_table_body {
+#kcqotyxnep .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -592,7 +598,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#kxkrhjayzh .gt_footnotes {
+#kcqotyxnep .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -606,7 +612,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#kxkrhjayzh .gt_footnote {
+#kcqotyxnep .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -615,7 +621,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#kxkrhjayzh .gt_sourcenotes {
+#kcqotyxnep .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -629,7 +635,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#kxkrhjayzh .gt_sourcenote {
+#kcqotyxnep .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -637,131 +643,146 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#kxkrhjayzh .gt_left {
+#kcqotyxnep .gt_left {
   text-align: left;
 }
 
-#kxkrhjayzh .gt_center {
+#kcqotyxnep .gt_center {
   text-align: center;
 }
 
-#kxkrhjayzh .gt_right {
+#kcqotyxnep .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#kxkrhjayzh .gt_font_normal {
+#kcqotyxnep .gt_font_normal {
   font-weight: normal;
 }
 
-#kxkrhjayzh .gt_font_bold {
+#kcqotyxnep .gt_font_bold {
   font-weight: bold;
 }
 
-#kxkrhjayzh .gt_font_italic {
+#kcqotyxnep .gt_font_italic {
   font-style: italic;
 }
 
-#kxkrhjayzh .gt_super {
+#kcqotyxnep .gt_super {
   font-size: 65%;
 }
 
-#kxkrhjayzh .gt_footnote_marks {
+#kcqotyxnep .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#kxkrhjayzh .gt_asterisk {
+#kcqotyxnep .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#kxkrhjayzh .gt_indent_1 {
+#kcqotyxnep .gt_indent_1 {
   text-indent: 5px;
 }
 
-#kxkrhjayzh .gt_indent_2 {
+#kcqotyxnep .gt_indent_2 {
   text-indent: 10px;
 }
 
-#kxkrhjayzh .gt_indent_3 {
+#kcqotyxnep .gt_indent_3 {
   text-indent: 15px;
 }
 
-#kxkrhjayzh .gt_indent_4 {
+#kcqotyxnep .gt_indent_4 {
   text-indent: 20px;
 }
 
-#kxkrhjayzh .gt_indent_5 {
+#kcqotyxnep .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-  <thead>
-    
-    <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="y">y</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="r2">r2</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="p">p</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="sig">sig</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="n">n</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="lab">lab</th>
-    </tr>
-  </thead>
-  <tbody class="gt_table_body">
-    <tr><td headers="y" class="gt_row gt_left">chl</td>
-<td headers="r2" class="gt_row gt_left">R^2 == 0.62</td>
-<td headers="p" class="gt_row gt_right">8.492324e-96</td>
-<td headers="sig" class="gt_row gt_center">TRUE</td>
-<td headers="n" class="gt_row gt_left">n == 445</td>
-<td headers="lab" class="gt_row gt_left">R^2 == 0.62*';'~n == 445</td></tr>
-    <tr><td headers="y" class="gt_row gt_left">secchi</td>
-<td headers="r2" class="gt_row gt_left">R^2 == 0.54</td>
-<td headers="p" class="gt_row gt_right">4.064755e-57</td>
-<td headers="sig" class="gt_row gt_center">TRUE</td>
-<td headers="n" class="gt_row gt_left">n == 329</td>
-<td headers="lab" class="gt_row gt_left">R^2 == 0.54*';'~n == 329</td></tr>
-    <tr><td headers="y" class="gt_row gt_left">doc</td>
-<td headers="r2" class="gt_row gt_left">R^2 == 0.18</td>
-<td headers="p" class="gt_row gt_right">1.198163e-09</td>
-<td headers="sig" class="gt_row gt_center">TRUE</td>
-<td headers="n" class="gt_row gt_left">n == 188</td>
-<td headers="lab" class="gt_row gt_left">R^2 == 0.18*';'~n == 188</td></tr>
-    <tr><td headers="y" class="gt_row gt_left">color</td>
-<td headers="r2" class="gt_row gt_left">R^2 == 0.22</td>
-<td headers="p" class="gt_row gt_right">3.011370e-19</td>
-<td headers="sig" class="gt_row gt_center">TRUE</td>
-<td headers="n" class="gt_row gt_left">n == 318</td>
-<td headers="lab" class="gt_row gt_left">R^2 == 0.22*';'~n == 318</td></tr>
-    <tr><td headers="y" class="gt_row gt_left">pri_proa</td>
-<td headers="r2" class="gt_row gt_left">R^2 == 0.33</td>
-<td headers="p" class="gt_row gt_right">1.169485e-06</td>
-<td headers="sig" class="gt_row gt_center">TRUE</td>
-<td headers="n" class="gt_row gt_left">n == 58</td>
-<td headers="lab" class="gt_row gt_left">R^2 == 0.33*';'~n == 58</td></tr>
-    <tr><td headers="y" class="gt_row gt_left">bac</td>
-<td headers="r2" class="gt_row gt_left">R^2 == 0.41</td>
-<td headers="p" class="gt_row gt_right">1.534555e-17</td>
-<td headers="sig" class="gt_row gt_center">TRUE</td>
-<td headers="n" class="gt_row gt_left">n == 139</td>
-<td headers="lab" class="gt_row gt_left">R^2 == 0.41*';'~n == 139</td></tr>
-    <tr><td headers="y" class="gt_row gt_left">coldfish</td>
-<td headers="r2" class="gt_row gt_left">R^2 == -0.03</td>
-<td headers="p" class="gt_row gt_right">8.801143e-01</td>
-<td headers="sig" class="gt_row gt_center">FALSE</td>
-<td headers="n" class="gt_row gt_left">n == 39</td>
-<td headers="lab" class="gt_row gt_left">R^2 == -0.03*';'~n == 39</td></tr>
-    <tr><td headers="y" class="gt_row gt_left">fishabun</td>
-<td headers="r2" class="gt_row gt_left">R^2 == -0.03</td>
-<td headers="p" class="gt_row gt_right">7.528448e-01</td>
-<td headers="sig" class="gt_row gt_center">FALSE</td>
-<td headers="n" class="gt_row gt_left">n == 35</td>
-<td headers="lab" class="gt_row gt_left">R^2 == -0.03*';'~n == 35</td></tr>
-  </tbody>
-  
-  
+
+<table class="gt_table table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_col_headings">
+<th id="y" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">y</th>
+<th id="r2" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">r2</th>
+<th id="p" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">p</th>
+<th id="sig" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">sig</th>
+<th id="n" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">n</th>
+<th id="lab" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">lab</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="y">chl</td>
+<td class="gt_row gt_left" headers="r2">R^2 == 0.62</td>
+<td class="gt_row gt_right" headers="p">8.492324e-96</td>
+<td class="gt_row gt_center" headers="sig">TRUE</td>
+<td class="gt_row gt_left" headers="n">n == 445</td>
+<td class="gt_row gt_left" headers="lab">R^2 == 0.62*';'~n == 445</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="y">secchi</td>
+<td class="gt_row gt_left" headers="r2">R^2 == 0.54</td>
+<td class="gt_row gt_right" headers="p">4.064755e-57</td>
+<td class="gt_row gt_center" headers="sig">TRUE</td>
+<td class="gt_row gt_left" headers="n">n == 329</td>
+<td class="gt_row gt_left" headers="lab">R^2 == 0.54*';'~n == 329</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="y">doc</td>
+<td class="gt_row gt_left" headers="r2">R^2 == 0.18</td>
+<td class="gt_row gt_right" headers="p">1.198163e-09</td>
+<td class="gt_row gt_center" headers="sig">TRUE</td>
+<td class="gt_row gt_left" headers="n">n == 188</td>
+<td class="gt_row gt_left" headers="lab">R^2 == 0.18*';'~n == 188</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="y">color</td>
+<td class="gt_row gt_left" headers="r2">R^2 == 0.22</td>
+<td class="gt_row gt_right" headers="p">3.011370e-19</td>
+<td class="gt_row gt_center" headers="sig">TRUE</td>
+<td class="gt_row gt_left" headers="n">n == 318</td>
+<td class="gt_row gt_left" headers="lab">R^2 == 0.22*';'~n == 318</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="y">pri_proa</td>
+<td class="gt_row gt_left" headers="r2">R^2 == 0.33</td>
+<td class="gt_row gt_right" headers="p">1.169485e-06</td>
+<td class="gt_row gt_center" headers="sig">TRUE</td>
+<td class="gt_row gt_left" headers="n">n == 58</td>
+<td class="gt_row gt_left" headers="lab">R^2 == 0.33*';'~n == 58</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="y">bac</td>
+<td class="gt_row gt_left" headers="r2">R^2 == 0.41</td>
+<td class="gt_row gt_right" headers="p">1.534555e-17</td>
+<td class="gt_row gt_center" headers="sig">TRUE</td>
+<td class="gt_row gt_left" headers="n">n == 139</td>
+<td class="gt_row gt_left" headers="lab">R^2 == 0.41*';'~n == 139</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="y">coldfish</td>
+<td class="gt_row gt_left" headers="r2">R^2 == -0.03</td>
+<td class="gt_row gt_right" headers="p">8.801143e-01</td>
+<td class="gt_row gt_center" headers="sig">FALSE</td>
+<td class="gt_row gt_left" headers="n">n == 39</td>
+<td class="gt_row gt_left" headers="lab">R^2 == -0.03*';'~n == 39</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="y">fishabun</td>
+<td class="gt_row gt_left" headers="r2">R^2 == -0.03</td>
+<td class="gt_row gt_right" headers="p">7.528448e-01</td>
+<td class="gt_row gt_center" headers="sig">FALSE</td>
+<td class="gt_row gt_left" headers="n">n == 35</td>
+<td class="gt_row gt_left" headers="lab">R^2 == -0.03*';'~n == 35</td>
+</tr>
+</tbody>
 </table>
+
 </div>
 </div>
 </div>
@@ -769,7 +790,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="setup-base-plots" class="level3">
 <h3 class="anchored" data-anchor-id="setup-base-plots">Setup base plots</h3>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>tp_lim <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">30</span>) <span class="co"># Keep 100?</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>y_breaks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="dv">1</span>, <span class="dv">10</span>, <span class="dv">100</span>, <span class="dv">1000</span>)</span>
@@ -802,7 +823,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>g1 <span class="ot">&lt;-</span> g0 <span class="sc">%+%</span> <span class="fu">drop_na</span>(fig2_4, chl) <span class="sc">+</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> chl), <span class="at">colour =</span> blu, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">alpha =</span> pnt_alpha) <span class="sc">+</span></span>
@@ -815,19 +836,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
 </div>
 <div class="cell-output-display">
-<p><img src="figures_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" style="width:60.0%"></p>
+<div>
+<figure class="figure">
+<p><img src="figures_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" style="width:60.0%"></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
 <p>A bit of variability in residuals, probably not a huge problem</p>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>DHARMa<span class="sc">::</span><span class="fu">simulateResiduals</span>(s<span class="sc">$</span>m[s<span class="sc">$</span>y <span class="sc">==</span> <span class="st">"chl"</span>][[<span class="dv">1</span>]], <span class="at">plot =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="figures_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" style="width:100.0%"></p>
+<div>
+<figure class="figure">
+<p><img src="figures_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Object of Class DHARMa with simulated residuals based on 250 simulations with refit = FALSE . See ?DHARMa::simulateResiduals for help. 
@@ -846,7 +875,7 @@ Scaled residual values: 0.08 0.124 0.84 0.476 0.912 0.928 0.172 0.284 0.424 0.78
 <div class="tab-content">
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>g2 <span class="ot">&lt;-</span> g0 <span class="sc">%+%</span> <span class="fu">drop_na</span>(fig2_4, secchi) <span class="sc">+</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.title =</span> <span class="fu">element_blank</span>(),</span>
@@ -864,30 +893,43 @@ Scaled residual values: 0.08 0.124 0.84 0.476 0.912 0.928 0.172 0.284 0.424 0.78
 <span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="dv">35</span>), <span class="at">breaks =</span> y_breaks)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stderr">
+<pre><code>Warning: A numeric `legend.position` argument in `theme()` was deprecated in ggplot2
+3.5.0.
+ℹ Please use the `legend.position.inside` argument of `theme()` instead.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
 <pre><code>Scale for y is already present.
 Adding another scale for y, which will replace the existing scale.</code></pre>
 </div>
-<details>
+<details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>g2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>g2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stderr">
 <pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
 </div>
 <div class="cell-output-display">
-<p><img src="figures_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" style="width:60.0%"></p>
+<div>
+<figure class="figure">
+<p><img src="figures_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" style="width:60.0%"></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
 <div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
 <p>A bit of variability in residuals, probably not a huge problem</p>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>DHARMa<span class="sc">::</span><span class="fu">simulateResiduals</span>(s<span class="sc">$</span>m[s<span class="sc">$</span>y <span class="sc">==</span> <span class="st">"secchi"</span>][[<span class="dv">1</span>]], <span class="at">plot =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>DHARMa<span class="sc">::</span><span class="fu">simulateResiduals</span>(s<span class="sc">$</span>m[s<span class="sc">$</span>y <span class="sc">==</span> <span class="st">"secchi"</span>][[<span class="dv">1</span>]], <span class="at">plot =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="figures_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" style="width:100.0%"></p>
+<div>
+<figure class="figure">
+<p><img src="figures_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Object of Class DHARMa with simulated residuals based on 250 simulations with refit = FALSE . See ?DHARMa::simulateResiduals for help. 
@@ -909,32 +951,40 @@ Scaled residual values: 0.6 0.292 0.56 0.896 0.612 0.688 0.876 0.64 0.812 0.284 
 <div class="tab-content">
 <div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>g3 <span class="ot">&lt;-</span> g0 <span class="sc">%+%</span> <span class="fu">drop_na</span>(fig2_4, doc) <span class="sc">+</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> doc), <span class="at">colour =</span> blu, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">alpha =</span> pnt_alpha) <span class="sc">+</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="fu">aes</span>(<span class="at">y =</span> doc), <span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">TRUE</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">colour =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#geom_text(data = s[s$y == "doc",], aes(label = lab, x = 1, y = 95), hjust = 0, vjust = 1, size = 3, parse = TRUE) +</span></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="fu">bquote</span>(<span class="st">"DOC"</span><span class="sc">~</span>(mg<span class="sc">/</span>L)))</span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>g3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>g3 <span class="ot">&lt;-</span> g0 <span class="sc">%+%</span> <span class="fu">drop_na</span>(fig2_4, doc) <span class="sc">+</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> doc), <span class="at">colour =</span> blu, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">alpha =</span> pnt_alpha) <span class="sc">+</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="fu">aes</span>(<span class="at">y =</span> doc), <span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">TRUE</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">colour =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#geom_text(data = s[s$y == "doc",], aes(label = lab, x = 1, y = 95), hjust = 0, vjust = 1, size = 3, parse = TRUE) +</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="fu">bquote</span>(<span class="st">"DOC"</span><span class="sc">~</span>(mg<span class="sc">/</span>L)))</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>g3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stderr">
 <pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
 </div>
 <div class="cell-output-display">
-<p><img src="figures_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" style="width:60.0%"></p>
+<div>
+<figure class="figure">
+<p><img src="figures_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" style="width:60.0%"></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
 <div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
 <p>A bit of variability in residuals, probably not a huge problem</p>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>DHARMa<span class="sc">::</span><span class="fu">simulateResiduals</span>(s<span class="sc">$</span>m[s<span class="sc">$</span>y <span class="sc">==</span> <span class="st">"doc"</span>][[<span class="dv">1</span>]], <span class="at">plot =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>DHARMa<span class="sc">::</span><span class="fu">simulateResiduals</span>(s<span class="sc">$</span>m[s<span class="sc">$</span>y <span class="sc">==</span> <span class="st">"doc"</span>][[<span class="dv">1</span>]], <span class="at">plot =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="figures_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" style="width:100.0%"></p>
+<div>
+<figure class="figure">
+<p><img src="figures_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Object of Class DHARMa with simulated residuals based on 250 simulations with refit = FALSE . See ?DHARMa::simulateResiduals for help. 
@@ -953,32 +1003,40 @@ Scaled residual values: 0.444 0.412 0.328 0.912 0.96 0.056 0.052 0.144 0.076 0.5
 <div class="tab-content">
 <div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>g4 <span class="ot">&lt;-</span> g0 <span class="sc">%+%</span> <span class="fu">drop_na</span>(fig2_4, color) <span class="sc">+</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> color), <span class="at">colour =</span> blu, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">alpha =</span> pnt_alpha) <span class="sc">+</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="fu">aes</span>(<span class="at">y =</span> color), <span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">TRUE</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">colour =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#geom_text(data = s[s$y == "color",], aes(label = lab, x = 1, y = 400), hjust = 0, vjust = 1, size = 3, parse = TRUE) +</span></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="fu">bquote</span>(<span class="st">"Colour"</span><span class="sc">~</span>(HU)))</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>g4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>g4 <span class="ot">&lt;-</span> g0 <span class="sc">%+%</span> <span class="fu">drop_na</span>(fig2_4, color) <span class="sc">+</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> color), <span class="at">colour =</span> blu, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">alpha =</span> pnt_alpha) <span class="sc">+</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="fu">aes</span>(<span class="at">y =</span> color), <span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">TRUE</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">colour =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#geom_text(data = s[s$y == "color",], aes(label = lab, x = 1, y = 400), hjust = 0, vjust = 1, size = 3, parse = TRUE) +</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="fu">bquote</span>(<span class="st">"Colour"</span><span class="sc">~</span>(HU)))</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>g4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stderr">
 <pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
 </div>
 <div class="cell-output-display">
-<p><img src="figures_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" style="width:60.0%"></p>
+<div>
+<figure class="figure">
+<p><img src="figures_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" style="width:60.0%"></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
 <div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
 <p>A bit of variability in residuals, probably not a huge problem</p>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>DHARMa<span class="sc">::</span><span class="fu">simulateResiduals</span>(s<span class="sc">$</span>m[s<span class="sc">$</span>y <span class="sc">==</span> <span class="st">"color"</span>][[<span class="dv">1</span>]], <span class="at">plot =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>DHARMa<span class="sc">::</span><span class="fu">simulateResiduals</span>(s<span class="sc">$</span>m[s<span class="sc">$</span>y <span class="sc">==</span> <span class="st">"color"</span>][[<span class="dv">1</span>]], <span class="at">plot =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="figures_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" style="width:100.0%"></p>
+<div>
+<figure class="figure">
+<p><img src="figures_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Object of Class DHARMa with simulated residuals based on 250 simulations with refit = FALSE . See ?DHARMa::simulateResiduals for help. 
@@ -997,32 +1055,40 @@ Scaled residual values: 0.276 0.244 0.084 0.12 0.2 0.044 0.564 0.044 0.2 0.052 0
 <div class="tab-content">
 <div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>g5 <span class="ot">&lt;-</span> g0 <span class="sc">%+%</span> <span class="fu">drop_na</span>(fig2_4, pri_proa) <span class="sc">+</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> pri_proa), <span class="at">colour =</span> blu, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">alpha =</span> pnt_alpha) <span class="sc">+</span></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="fu">aes</span>(<span class="at">y =</span> pri_proa), <span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">TRUE</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">colour =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#geom_text(data = s[s$y == "pri_proa",], aes(label = lab, x = 1, y = 1000), hjust = 0, vjust = 1, size = 3, parse = TRUE) +</span></span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="fu">bquote</span>(<span class="st">"PA"</span><span class="sc">~</span>(g<span class="sc">~</span>C<span class="sc">~</span>m<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>yr)))</span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>g5</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>g5 <span class="ot">&lt;-</span> g0 <span class="sc">%+%</span> <span class="fu">drop_na</span>(fig2_4, pri_proa) <span class="sc">+</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> pri_proa), <span class="at">colour =</span> blu, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">alpha =</span> pnt_alpha) <span class="sc">+</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="fu">aes</span>(<span class="at">y =</span> pri_proa), <span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">TRUE</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">colour =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#geom_text(data = s[s$y == "pri_proa",], aes(label = lab, x = 1, y = 1000), hjust = 0, vjust = 1, size = 3, parse = TRUE) +</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="fu">bquote</span>(<span class="st">"PA"</span><span class="sc">~</span>(g<span class="sc">~</span>C<span class="sc">~</span>m<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>yr)))</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>g5</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stderr">
 <pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
 </div>
 <div class="cell-output-display">
-<p><img src="figures_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" style="width:60.0%"></p>
+<div>
+<figure class="figure">
+<p><img src="figures_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" style="width:60.0%"></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
 <div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
 <p>A bit of variability in residuals, probably not a huge problem</p>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>DHARMa<span class="sc">::</span><span class="fu">simulateResiduals</span>(s<span class="sc">$</span>m[s<span class="sc">$</span>y <span class="sc">==</span> <span class="st">"pri_proa"</span>][[<span class="dv">1</span>]], <span class="at">plot =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>DHARMa<span class="sc">::</span><span class="fu">simulateResiduals</span>(s<span class="sc">$</span>m[s<span class="sc">$</span>y <span class="sc">==</span> <span class="st">"pri_proa"</span>][[<span class="dv">1</span>]], <span class="at">plot =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="figures_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" style="width:100.0%"></p>
+<div>
+<figure class="figure">
+<p><img src="figures_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Object of Class DHARMa with simulated residuals based on 250 simulations with refit = FALSE . See ?DHARMa::simulateResiduals for help. 
@@ -1041,32 +1107,40 @@ Scaled residual values: 0.868 0.928 0.984 0.876 0.68 0.528 0.596 0.532 0.672 0.6
 <div class="tab-content">
 <div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-6-1-tab">
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>g6 <span class="ot">&lt;-</span> g0 <span class="sc">%+%</span> <span class="fu">drop_na</span>(fig2_4, bac) <span class="sc">+</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> bac), <span class="at">colour =</span> blu, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">alpha =</span> pnt_alpha) <span class="sc">+</span></span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="fu">aes</span>(<span class="at">y =</span> bac), <span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">TRUE</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">colour =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#geom_text(data = s[s$y == "bac",], aes(label = lab, x = 1, y = 25), hjust = 0, vjust = 1, size = 3, parse = TRUE) +</span></span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="fu">bquote</span>(<span class="st">"Bacteria number"</span><span class="sc">~</span>(<span class="dv">10</span><span class="sc">^</span><span class="dv">6</span><span class="sc">/</span>mL)))</span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>g6</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>g6 <span class="ot">&lt;-</span> g0 <span class="sc">%+%</span> <span class="fu">drop_na</span>(fig2_4, bac) <span class="sc">+</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> bac), <span class="at">colour =</span> blu, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">alpha =</span> pnt_alpha) <span class="sc">+</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="fu">aes</span>(<span class="at">y =</span> bac), <span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">TRUE</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">colour =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#geom_text(data = s[s$y == "bac",], aes(label = lab, x = 1, y = 25), hjust = 0, vjust = 1, size = 3, parse = TRUE) +</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="fu">bquote</span>(<span class="st">"Bacteria number"</span><span class="sc">~</span>(<span class="dv">10</span><span class="sc">^</span><span class="dv">6</span><span class="sc">/</span>mL)))</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>g6</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stderr">
 <pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
 </div>
 <div class="cell-output-display">
-<p><img src="figures_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" style="width:60.0%"></p>
+<div>
+<figure class="figure">
+<p><img src="figures_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" style="width:60.0%"></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
 <div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-2-tab">
 <p>A bit of variability in residuals, probably not a huge problem</p>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>DHARMa<span class="sc">::</span><span class="fu">simulateResiduals</span>(s<span class="sc">$</span>m[s<span class="sc">$</span>y <span class="sc">==</span> <span class="st">"bac"</span>][[<span class="dv">1</span>]], <span class="at">plot =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>DHARMa<span class="sc">::</span><span class="fu">simulateResiduals</span>(s<span class="sc">$</span>m[s<span class="sc">$</span>y <span class="sc">==</span> <span class="st">"bac"</span>][[<span class="dv">1</span>]], <span class="at">plot =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="figures_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" style="width:100.0%"></p>
+<div>
+<figure class="figure">
+<p><img src="figures_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Object of Class DHARMa with simulated residuals based on 250 simulations with refit = FALSE . See ?DHARMa::simulateResiduals for help. 
@@ -1083,19 +1157,23 @@ Scaled residual values: 0.64 0.604 0.132 0.252 0.916 0.68 0.284 0.384 0.912 0.85
 <section id="figure-6" class="level5">
 <h5 class="anchored" data-anchor-id="figure-6">Figure</h5>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>g7 <span class="ot">&lt;-</span> g0 <span class="sc">%+%</span> <span class="fu">drop_na</span>(fig2_4, z) <span class="sc">+</span></span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> z), <span class="at">colour =</span> blu, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">alpha =</span> pnt_alpha) <span class="sc">+</span></span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="fu">aes</span>(<span class="at">y =</span> z), <span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">TRUE</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">colour =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="fu">bquote</span>(<span class="st">"Mean Depth"</span><span class="sc">~</span>(m)))</span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>g7</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>g7 <span class="ot">&lt;-</span> g0 <span class="sc">%+%</span> <span class="fu">drop_na</span>(fig2_4, z) <span class="sc">+</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> z), <span class="at">colour =</span> blu, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">alpha =</span> pnt_alpha) <span class="sc">+</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="fu">aes</span>(<span class="at">y =</span> z), <span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">TRUE</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">colour =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="fu">bquote</span>(<span class="st">"Mean Depth"</span><span class="sc">~</span>(m)))</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>g7</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stderr">
 <pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
 </div>
 <div class="cell-output-display">
-<p><img src="figures_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" style="width:60.0%"></p>
+<div>
+<figure class="figure">
+<p><img src="figures_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" style="width:60.0%"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -1105,19 +1183,23 @@ Scaled residual values: 0.64 0.604 0.132 0.252 0.916 0.68 0.284 0.384 0.912 0.85
 <section id="figure-7" class="level5">
 <h5 class="anchored" data-anchor-id="figure-7">Figure</h5>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>g8 <span class="ot">&lt;-</span> g0 <span class="sc">%+%</span> <span class="fu">drop_na</span>(fig2_4, tn) <span class="sc">+</span></span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> tn), <span class="at">colour =</span> blu, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">alpha =</span> pnt_alpha) <span class="sc">+</span></span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="fu">aes</span>(<span class="at">y =</span> tn), <span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">TRUE</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">colour =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="fu">bquote</span>(<span class="st">"Total Nitrogen "</span><span class="sc">~</span>(mu<span class="sc">*</span>g<span class="sc">/</span>L)))</span>
-<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>g8</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>g8 <span class="ot">&lt;-</span> g0 <span class="sc">%+%</span> <span class="fu">drop_na</span>(fig2_4, tn) <span class="sc">+</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> tn), <span class="at">colour =</span> blu, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">alpha =</span> pnt_alpha) <span class="sc">+</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="fu">aes</span>(<span class="at">y =</span> tn), <span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">TRUE</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">colour =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="fu">bquote</span>(<span class="st">"Total Nitrogen "</span><span class="sc">~</span>(mu<span class="sc">*</span>g<span class="sc">/</span>L)))</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>g8</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stderr">
 <pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
 </div>
 <div class="cell-output-display">
-<p><img src="figures_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" style="width:60.0%"></p>
+<div>
+<figure class="figure">
+<p><img src="figures_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" style="width:60.0%"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -1126,9 +1208,9 @@ Scaled residual values: 0.64 0.604 0.132 0.252 0.916 0.68 0.284 0.384 0.912 0.85
 <section id="combine-figures" class="level3">
 <h3 class="anchored" data-anchor-id="combine-figures">Combine figures</h3>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>(g7 <span class="sc">+</span> g8) <span class="sc">/</span> (g1 <span class="sc">+</span> g2) <span class="sc">/</span> (g3 <span class="sc">+</span> g4) <span class="sc">/</span> (g5 <span class="sc">+</span> g6) <span class="sc">+</span> <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">"A"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>(g7 <span class="sc">+</span> g8) <span class="sc">/</span> (g1 <span class="sc">+</span> g2) <span class="sc">/</span> (g3 <span class="sc">+</span> g4) <span class="sc">/</span> (g5 <span class="sc">+</span> g6) <span class="sc">+</span> <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">"A"</span>, <span class="at">tag_prefix =</span> <span class="st">"("</span>, <span class="at">tag_suffix =</span> <span class="st">")"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stderr">
 <pre><code>`geom_smooth()` using formula = 'y ~ x'
@@ -1141,7 +1223,11 @@ Scaled residual values: 0.64 0.604 0.132 0.252 0.916 0.68 0.284 0.384 0.912 0.85
 `geom_smooth()` using formula = 'y ~ x'</code></pre>
 </div>
 <div class="cell-output-display">
-<p><img src="figures_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid" style="width:100.0%"></p>
+<div>
+<figure class="figure">
+<p><img src="figures_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -1155,24 +1241,28 @@ Scaled residual values: 0.64 0.604 0.132 0.252 0.916 0.68 0.284 0.384 0.912 0.85
 </ul>
 </blockquote>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>g7 <span class="ot">&lt;-</span> g0<span class="fl">.1</span> <span class="sc">+</span></span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(), <span class="at">axis.ticks.x =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
-<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> coldfish), <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="fu">bquote</span>(<span class="st">"Coldwater Fish Species"</span><span class="sc">~</span>(<span class="st">"#"</span>))) <span class="sc">+</span></span>
-<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> tp_lim, <span class="at">linetype =</span> <span class="st">"dashed"</span>)</span>
-<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>g8 <span class="ot">&lt;-</span> g0<span class="fl">.1</span> <span class="sc">+</span></span>
-<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> fishabun), <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="fu">bquote</span>(<span class="st">"Total Fish Species"</span><span class="sc">~</span>(<span class="st">"#"</span>))) <span class="sc">+</span></span>
-<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> tp_lim, <span class="at">linetype =</span> <span class="st">"dashed"</span>)</span>
-<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a>g7 <span class="sc">/</span> g8 <span class="sc">+</span> <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">"A"</span>, <span class="at">tag_prefix =</span> <span class="st">"("</span>, <span class="at">tag_suffix =</span> <span class="st">")"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>g7 <span class="ot">&lt;-</span> g0<span class="fl">.1</span> <span class="sc">+</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(), <span class="at">axis.ticks.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> coldfish), <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="fu">bquote</span>(<span class="st">"Coldwater Fish Species"</span><span class="sc">~</span>(<span class="st">"#"</span>))) <span class="sc">+</span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> tp_lim, <span class="at">linetype =</span> <span class="st">"dashed"</span>)</span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>g8 <span class="ot">&lt;-</span> g0<span class="fl">.1</span> <span class="sc">+</span></span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> fishabun), <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="fu">bquote</span>(<span class="st">"Total Fish Species"</span><span class="sc">~</span>(<span class="st">"#"</span>))) <span class="sc">+</span></span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> tp_lim, <span class="at">linetype =</span> <span class="st">"dashed"</span>)</span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>g7 <span class="sc">/</span> g8 <span class="sc">+</span> <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">"A"</span>, <span class="at">tag_prefix =</span> <span class="st">"("</span>, <span class="at">tag_suffix =</span> <span class="st">")"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="figures_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid" style="width:50.0%"></p>
+<div>
+<figure class="figure">
+<p><img src="figures_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" style="width:50.0%"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -1180,126 +1270,121 @@ Scaled residual values: 0.64 0.604 0.132 0.252 0.916 0.68 0.284 0.384 0.912 0.85
 <section id="reproducibility" class="level2">
 <h2 class="anchored" data-anchor-id="reproducibility">Reproducibility</h2>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">session_info</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">session_info</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>─ Session info ───────────────────────────────────────────────────────────────
  setting  value
- version  R version 4.3.2 (2023-10-31)
- os       Ubuntu 22.04.3 LTS
+ version  R version 4.4.0 (2024-04-24)
+ os       Ubuntu 22.04.4 LTS
  system   x86_64, linux-gnu
  ui       X11
  language en_CA:en
  collate  en_CA.UTF-8
  ctype    en_CA.UTF-8
- tz       America/Toronto
- date     2024-01-05
+ tz       America/Winnipeg
+ date     2024-06-17
  pandoc   3.1.1 @ /usr/lib/rstudio/resources/app/bin/quarto/bin/tools/ (via rmarkdown)
 
 ─ Packages ───────────────────────────────────────────────────────────────────
  package      * version  date (UTC) lib source
- boot           1.3-28   2021-05-03 [4] CRAN (R 4.2.0)
- cachem         1.0.8    2023-05-01 [1] CRAN (R 4.3.0)
- callr          3.7.3    2022-11-02 [1] CRAN (R 4.3.0)
- cellranger     1.1.0    2016-07-27 [1] CRAN (R 4.3.0)
- cli            3.6.1    2023-03-23 [1] CRAN (R 4.3.0)
+ boot           1.3-30   2024-02-26 [4] CRAN (R 4.3.3)
+ cachem         1.1.0    2024-05-16 [1] CRAN (R 4.4.0)
+ cellranger     1.1.0    2016-07-27 [1] CRAN (R 4.4.0)
+ cli            3.6.2    2023-12-11 [1] CRAN (R 4.4.0)
  codetools      0.2-19   2023-02-01 [4] CRAN (R 4.2.2)
- colorspace     2.1-0    2023-01-23 [1] CRAN (R 4.3.0)
- crayon         1.5.2    2022-09-29 [1] CRAN (R 4.3.0)
- devtools       2.4.5    2022-10-11 [1] CRAN (R 4.3.0)
- DHARMa         0.4.6    2022-09-08 [1] CRAN (R 4.3.1)
- digest         0.6.33   2023-07-07 [1] CRAN (R 4.3.1)
- doParallel     1.0.17   2022-02-07 [1] CRAN (R 4.3.1)
- dplyr        * 1.1.3    2023-09-03 [1] CRAN (R 4.3.1)
- ellipsis       0.3.2    2021-04-29 [1] CRAN (R 4.3.0)
- evaluate       0.23     2023-11-01 [1] CRAN (R 4.3.1)
- fansi          1.0.5    2023-10-08 [1] CRAN (R 4.3.1)
- farver         2.1.1    2022-07-06 [1] CRAN (R 4.3.0)
- fastmap        1.1.1    2023-02-24 [1] CRAN (R 4.3.0)
- forcats      * 1.0.0    2023-01-29 [1] CRAN (R 4.3.0)
- foreach        1.5.2    2022-02-02 [1] CRAN (R 4.3.0)
- fs             1.6.3    2023-07-20 [1] CRAN (R 4.3.1)
- gap            1.5-3    2023-08-26 [1] CRAN (R 4.3.1)
- gap.datasets   0.0.6    2023-08-25 [1] CRAN (R 4.3.1)
- generics       0.1.3    2022-07-05 [1] CRAN (R 4.3.0)
- ggplot2      * 3.4.4    2023-10-12 [1] CRAN (R 4.3.1)
- glue           1.6.2    2022-02-24 [1] CRAN (R 4.3.0)
- gt             0.10.0   2023-10-07 [1] CRAN (R 4.3.1)
- gtable         0.3.4    2023-08-21 [1] CRAN (R 4.3.1)
- hms            1.1.3    2023-03-21 [1] CRAN (R 4.3.0)
- htmltools      0.5.7    2023-11-03 [1] CRAN (R 4.3.1)
- htmlwidgets    1.6.2    2023-03-17 [1] CRAN (R 4.3.0)
- httpuv         1.6.12   2023-10-23 [1] CRAN (R 4.3.1)
- iterators      1.0.14   2022-02-05 [1] CRAN (R 4.3.0)
- janitor      * 2.2.0    2023-02-02 [1] CRAN (R 4.3.0)
- jsonlite       1.8.7    2023-06-29 [1] CRAN (R 4.3.1)
- knitr          1.45     2023-10-30 [1] CRAN (R 4.3.1)
- labeling       0.4.3    2023-08-29 [1] CRAN (R 4.3.1)
- later          1.3.1    2023-05-02 [1] CRAN (R 4.3.1)
+ colorspace     2.1-0    2023-01-23 [1] CRAN (R 4.4.0)
+ devtools       2.4.5    2022-10-11 [1] CRAN (R 4.4.0)
+ DHARMa         0.4.6    2022-09-08 [1] CRAN (R 4.4.0)
+ digest         0.6.35   2024-03-11 [1] CRAN (R 4.4.0)
+ doParallel     1.0.17   2022-02-07 [1] CRAN (R 4.4.0)
+ dplyr        * 1.1.4    2023-11-17 [1] CRAN (R 4.4.0)
+ ellipsis       0.3.2    2021-04-29 [1] CRAN (R 4.4.0)
+ evaluate       0.23     2023-11-01 [1] CRAN (R 4.4.0)
+ fansi          1.0.6    2023-12-08 [1] CRAN (R 4.4.0)
+ farver         2.1.2    2024-05-13 [1] CRAN (R 4.4.0)
+ fastmap        1.2.0    2024-05-15 [1] CRAN (R 4.4.0)
+ forcats      * 1.0.0    2023-01-29 [1] CRAN (R 4.4.0)
+ foreach        1.5.2    2022-02-02 [1] CRAN (R 4.4.0)
+ fs             1.6.4    2024-04-25 [1] CRAN (R 4.4.0)
+ gap            1.5-3    2023-08-26 [1] CRAN (R 4.4.0)
+ gap.datasets   0.0.6    2023-08-25 [1] CRAN (R 4.4.0)
+ generics       0.1.3    2022-07-05 [1] CRAN (R 4.4.0)
+ ggplot2      * 3.5.1    2024-04-23 [1] CRAN (R 4.4.0)
+ glue           1.7.0    2024-01-09 [1] CRAN (R 4.4.0)
+ gt             0.10.1   2024-01-17 [1] CRAN (R 4.4.0)
+ gtable         0.3.5    2024-04-22 [1] CRAN (R 4.4.0)
+ hms            1.1.3    2023-03-21 [1] CRAN (R 4.4.0)
+ htmltools      0.5.8.1  2024-04-04 [1] CRAN (R 4.4.0)
+ htmlwidgets    1.6.4    2023-12-06 [1] CRAN (R 4.4.0)
+ httpuv         1.6.15   2024-03-26 [1] CRAN (R 4.4.0)
+ iterators      1.0.14   2022-02-05 [1] CRAN (R 4.4.0)
+ janitor      * 2.2.0    2023-02-02 [1] CRAN (R 4.4.0)
+ jsonlite       1.8.8    2023-12-04 [1] CRAN (R 4.4.0)
+ knitr          1.47     2024-05-29 [1] CRAN (R 4.4.0)
+ labeling       0.4.3    2023-08-29 [1] CRAN (R 4.4.0)
+ later          1.3.2    2023-12-06 [1] CRAN (R 4.4.0)
  lattice        0.22-5   2023-10-24 [4] CRAN (R 4.3.1)
- lifecycle      1.0.3    2022-10-07 [1] CRAN (R 4.3.0)
- lme4           1.1-35.1 2023-11-05 [1] CRAN (R 4.3.1)
- lubridate    * 1.9.3    2023-09-27 [1] CRAN (R 4.3.1)
- magrittr       2.0.3    2022-03-30 [1] CRAN (R 4.3.0)
+ lifecycle      1.0.4    2023-11-07 [1] CRAN (R 4.4.0)
+ lme4           1.1-35.3 2024-04-16 [1] CRAN (R 4.4.0)
+ lubridate    * 1.9.3    2023-09-27 [1] CRAN (R 4.4.0)
+ magrittr       2.0.3    2022-03-30 [1] CRAN (R 4.4.0)
  MASS           7.3-60   2023-05-04 [4] CRAN (R 4.3.1)
- Matrix         1.6-1.1  2023-09-18 [1] CRAN (R 4.3.1)
- memoise        2.0.1    2021-11-26 [1] CRAN (R 4.3.0)
- mgcv           1.9-0    2023-07-11 [1] CRAN (R 4.3.1)
- mime           0.12     2021-09-28 [1] CRAN (R 4.3.0)
- miniUI         0.1.1.1  2018-05-18 [1] CRAN (R 4.3.0)
- minqa          1.2.6    2023-09-11 [1] CRAN (R 4.3.1)
- munsell        0.5.0    2018-06-12 [1] CRAN (R 4.3.0)
- nlme           3.1-163  2023-08-09 [4] CRAN (R 4.3.1)
- nloptr         2.0.3    2022-05-26 [1] CRAN (R 4.3.0)
- patchwork    * 1.1.3    2023-08-14 [1] CRAN (R 4.3.1)
- pillar         1.9.0    2023-03-22 [1] CRAN (R 4.3.0)
- pkgbuild       1.4.2    2023-06-26 [1] CRAN (R 4.3.1)
- pkgconfig      2.0.3    2019-09-22 [1] CRAN (R 4.3.0)
- pkgload        1.3.3    2023-09-22 [1] CRAN (R 4.3.1)
- plyr           1.8.9    2023-10-02 [1] CRAN (R 4.3.1)
- prettyunits    1.2.0    2023-09-24 [1] CRAN (R 4.3.1)
- processx       3.8.2    2023-06-30 [1] CRAN (R 4.3.1)
- profvis        0.3.8    2023-05-02 [1] CRAN (R 4.3.1)
- promises       1.2.1    2023-08-10 [1] CRAN (R 4.3.1)
- ps             1.7.5    2023-04-18 [1] CRAN (R 4.3.0)
- purrr        * 1.0.2    2023-08-10 [1] CRAN (R 4.3.1)
- qgam           1.3.4    2021-11-22 [1] CRAN (R 4.3.1)
- R6             2.5.1    2021-08-19 [1] CRAN (R 4.3.0)
- rbibutils      2.2.16   2023-10-25 [1] CRAN (R 4.3.1)
- Rcpp           1.0.11   2023-07-06 [1] CRAN (R 4.3.1)
- Rdpack         2.5      2023-08-21 [1] CRAN (R 4.3.1)
- readr        * 2.1.4    2023-02-10 [1] CRAN (R 4.3.0)
- readxl       * 1.4.3    2023-07-06 [1] CRAN (R 4.3.1)
- remotes        2.4.2.1  2023-07-18 [1] CRAN (R 4.3.1)
- rlang          1.1.2    2023-11-04 [1] CRAN (R 4.3.1)
- rmarkdown      2.25     2023-09-18 [1] CRAN (R 4.3.1)
- rstudioapi     0.15.0   2023-07-07 [1] CRAN (R 4.3.1)
- sass           0.4.7    2023-07-15 [1] CRAN (R 4.3.1)
- scales         1.2.1    2022-08-20 [1] CRAN (R 4.3.0)
- sessioninfo    1.2.2    2021-12-06 [1] CRAN (R 4.3.0)
- shiny          1.7.5.1  2023-10-14 [1] CRAN (R 4.3.1)
- snakecase      0.11.1   2023-08-27 [1] CRAN (R 4.3.1)
- stringi        1.7.12   2023-01-11 [1] CRAN (R 4.3.0)
- stringr      * 1.5.0    2022-12-02 [1] CRAN (R 4.3.0)
- tibble       * 3.2.1    2023-03-20 [1] CRAN (R 4.3.0)
- tidyr        * 1.3.0    2023-01-24 [1] CRAN (R 4.3.0)
- tidyselect     1.2.0    2022-10-10 [1] CRAN (R 4.3.0)
- tidyverse    * 2.0.0    2023-02-22 [1] CRAN (R 4.3.0)
- timechange     0.2.0    2023-01-11 [1] CRAN (R 4.3.0)
- tzdb           0.4.0    2023-05-12 [1] CRAN (R 4.3.1)
- urlchecker     1.0.1    2021-11-30 [1] CRAN (R 4.3.0)
- usethis        2.2.2    2023-07-06 [1] CRAN (R 4.3.1)
- utf8           1.2.4    2023-10-22 [1] CRAN (R 4.3.1)
- vctrs          0.6.4    2023-10-12 [1] CRAN (R 4.3.1)
- withr          2.5.2    2023-10-30 [1] CRAN (R 4.3.1)
- xfun           0.41     2023-11-01 [1] CRAN (R 4.3.1)
- xml2           1.3.5    2023-07-06 [1] CRAN (R 4.3.1)
- xtable         1.8-4    2019-04-21 [1] CRAN (R 4.3.0)
- yaml           2.3.7    2023-01-23 [1] CRAN (R 4.3.0)
+ Matrix         1.6-5    2024-01-11 [4] CRAN (R 4.3.3)
+ memoise        2.0.1    2021-11-26 [1] CRAN (R 4.4.0)
+ mgcv           1.9-1    2023-12-21 [4] CRAN (R 4.3.2)
+ mime           0.12     2021-09-28 [1] CRAN (R 4.4.0)
+ miniUI         0.1.1.1  2018-05-18 [1] CRAN (R 4.4.0)
+ minqa          1.2.6    2023-09-11 [1] CRAN (R 4.4.0)
+ munsell        0.5.1    2024-04-01 [1] CRAN (R 4.4.0)
+ nlme           3.1-165  2024-06-06 [4] CRAN (R 4.4.0)
+ nloptr         2.0.3    2022-05-26 [1] CRAN (R 4.4.0)
+ patchwork    * 1.2.0    2024-01-08 [1] CRAN (R 4.4.0)
+ pillar         1.9.0    2023-03-22 [1] CRAN (R 4.4.0)
+ pkgbuild       1.4.4    2024-03-17 [1] CRAN (R 4.4.0)
+ pkgconfig      2.0.3    2019-09-22 [1] CRAN (R 4.4.0)
+ pkgload        1.3.4    2024-01-16 [1] CRAN (R 4.4.0)
+ plyr           1.8.9    2023-10-02 [1] CRAN (R 4.4.0)
+ profvis        0.3.8    2023-05-02 [1] CRAN (R 4.4.0)
+ promises       1.3.0    2024-04-05 [1] CRAN (R 4.4.0)
+ purrr        * 1.0.2    2023-08-10 [1] CRAN (R 4.4.0)
+ qgam           1.3.4    2021-11-22 [1] CRAN (R 4.4.0)
+ R6             2.5.1    2021-08-19 [1] CRAN (R 4.4.0)
+ rbibutils      2.2.16   2023-10-25 [1] CRAN (R 4.4.0)
+ Rcpp           1.0.12   2024-01-09 [1] CRAN (R 4.4.0)
+ Rdpack         2.6      2023-11-08 [1] CRAN (R 4.4.0)
+ readr        * 2.1.5    2024-01-10 [1] CRAN (R 4.4.0)
+ readxl       * 1.4.3    2023-07-06 [1] CRAN (R 4.4.0)
+ remotes        2.5.0    2024-03-17 [1] CRAN (R 4.4.0)
+ rlang          1.1.3    2024-01-10 [1] CRAN (R 4.4.0)
+ rmarkdown      2.27     2024-05-17 [1] CRAN (R 4.4.0)
+ rstudioapi     0.16.0   2024-03-24 [1] CRAN (R 4.4.0)
+ sass           0.4.9    2024-03-15 [1] CRAN (R 4.4.0)
+ scales         1.3.0    2023-11-28 [1] CRAN (R 4.4.0)
+ sessioninfo    1.2.2    2021-12-06 [1] CRAN (R 4.4.0)
+ shiny          1.8.1.1  2024-04-02 [1] CRAN (R 4.4.0)
+ snakecase      0.11.1   2023-08-27 [1] CRAN (R 4.4.0)
+ stringi        1.8.4    2024-05-06 [1] CRAN (R 4.4.0)
+ stringr      * 1.5.1    2023-11-14 [1] CRAN (R 4.4.0)
+ tibble       * 3.2.1    2023-03-20 [1] CRAN (R 4.4.0)
+ tidyr        * 1.3.1    2024-01-24 [1] CRAN (R 4.4.0)
+ tidyselect     1.2.1    2024-03-11 [1] CRAN (R 4.4.0)
+ tidyverse    * 2.0.0    2023-02-22 [1] CRAN (R 4.4.0)
+ timechange     0.3.0    2024-01-18 [1] CRAN (R 4.4.0)
+ tzdb           0.4.0    2023-05-12 [1] CRAN (R 4.4.0)
+ urlchecker     1.0.1    2021-11-30 [1] CRAN (R 4.4.0)
+ usethis        2.2.3    2024-02-19 [1] CRAN (R 4.4.0)
+ utf8           1.2.4    2023-10-22 [1] CRAN (R 4.4.0)
+ vctrs          0.6.5    2023-12-01 [1] CRAN (R 4.4.0)
+ withr          3.0.0    2024-01-16 [1] CRAN (R 4.4.0)
+ xfun           0.44     2024-05-15 [1] CRAN (R 4.4.0)
+ xml2           1.3.6    2023-12-04 [1] CRAN (R 4.4.0)
+ xtable         1.8-4    2019-04-21 [1] CRAN (R 4.4.0)
+ yaml           2.3.8    2023-12-11 [1] CRAN (R 4.4.0)
 
- [1] /home/steffi/R/x86_64-pc-linux-gnu-library/4.3
+ [1] /home/steffi/R/x86_64-pc-linux-gnu-library/4.4
  [2] /usr/local/lib/R/site-library
  [3] /usr/lib/R/site-library
  [4] /usr/lib/R/library
@@ -1390,10 +1475,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -1403,8 +1487,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1417,6 +1510,125 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -1460,6 +1672,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1485,6 +1698,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1545,6 +1784,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+
 
 
 

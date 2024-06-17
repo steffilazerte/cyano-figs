@@ -155,7 +155,7 @@ g3 <- g0 +
   annotate(geom = "text", x = 0, y = Inf, hjust = 0, vjust = 1.1, 
            label = stats$label[stats$names == "index"], parse = TRUE)
 
-g1 / g2 / g3 + plot_layout(axis_titles = "collect") + plot_annotation(tag_levels = "A")
+g1 / g2 / g3 + plot_layout(axis_titles = "collect") + plot_annotation(tag_levels = "A", tag_prefix = "(", tag_suffix = ")")
 ```
 
 

@@ -82,7 +82,7 @@ g3 <- ggplot(data = filter(monthly, type == "chl"), aes(x = month, y = value)) +
 
 g1 / g2 / g3 +
   plot_layout(axes = "collect") +
-  plot_annotation(tag_levels = "A") &
+  plot_annotation(tag_levels = "A", tag_prefix = "(", tag_suffix = ")") &
   theme_bw() &
   theme(plot.margin = margin(), 
         plot.tag.position = c("topleft"), 

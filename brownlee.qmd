@@ -90,7 +90,7 @@ g3 <- g0 +
   scale_y_continuous(limits = c(0, 50), name = bquote("Chlorophyll"~(mu*g/L)))
 
 
-gg <- g00 / g3 / g1 / g2 + plot_annotation(tag_levels = "A") +
+gg <- g00 / g3 / g1 / g2 + plot_annotation(tag_levels = "A", tag_prefix = "(", tag_suffix = ")") +
   plot_layout(heights = c(1, 3, 3, 3))
 
 gg

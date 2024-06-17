@@ -84,7 +84,7 @@ g2 <- ggplot(drop_na(fig2_3, trophy), aes(x = afsum, y = osgood, size = trophy))
   labs(x = bquote("Anoxic Factor"~(d/summer)), y = bquote("Morphometric ratio"~(m/km^2)),
        size = "Tropic level")
 
-g1 + g2 + plot_annotation(tag_levels = "A")
+g1 + g2 + plot_annotation(tag_levels = "A", tag_prefix = "(", tag_suffix = ")")
 ```
 
 ## Figure 2.4
@@ -354,7 +354,7 @@ g8
 #| fig-dpi: 600
 #| out-width: 100%
 
-(g7 + g8) / (g1 + g2) / (g3 + g4) / (g5 + g6) + plot_annotation(tag_levels = "A")
+(g7 + g8) / (g1 + g2) / (g3 + g4) / (g5 + g6) + plot_annotation(tag_levels = "A", tag_prefix = "(", tag_suffix = ")")
 ```
 
 
