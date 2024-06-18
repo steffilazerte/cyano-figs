@@ -47,7 +47,7 @@ stats <- tibble(model = list(m1, m2),
          n = map_int(model, \(x) length(summary(x)$residuals)),
          p = map_dbl(model, \(x) summary(x)$coefficients[2,4]),
          p = if_else(p <= 0.01, "<0.01", paste0("==", round(p, 2))),
-         label = paste0("n==", n, "*','~R^2=='", r2, "'*','~p", p))
+         label = paste0("italic(n)==", n, "*','~italic(R)^2=='", r2, "'*','~italic(p)", p))
 ```
 
 ### Checks

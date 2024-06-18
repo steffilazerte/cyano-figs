@@ -50,7 +50,7 @@ stats <- tibble(model = list(m1, m2, m3),
          p = case_when(p < 0.0001 ~ "<0.0001", 
                        p < 0.001 ~ "<0.001", 
                        p < 0.01 ~ "<0.01"),
-         label = paste0("n==", n, "*','~R^2=='", r2, "'*','~p", p))
+         label = paste0("italic(n)==", n, "*','~italic(R)^2=='", r2, "'*','~italic(p)", p))
 ```
 
 ### Checks
@@ -129,7 +129,7 @@ g2 <- g0 +
   geom_text(data = d, aes(x = x_lab, y = y_lab, label = year), size = 3.2, colour = "white", fontface = "bold", 
             vjust = 1, hjust = -0.15) +
   geom_text(data = d, aes(x = x_lab, y = y_lab, label = year), size = 3, vjust = 1, hjust = -0.2) +
-  labs(y = bquote("Cyanbacteria abundance"~(ASU/mL))) +
+  labs(y = bquote("Cyanobacteria abundance"~(ASU/mL))) +
   annotation_logticks(sides = "l") +
   annotate(geom = "text", x = 0, y = Inf, hjust = 0, vjust = 1.1, 
            label = stats$label[stats$names == "abun"], parse = TRUE)
@@ -167,7 +167,7 @@ ggplot(d, aes(x = int_load)) +
         panel.background = element_rect(fill = "grey85")) +
   stat_smooth(aes(y = abun), method = "lm", se = TRUE, na.rm = TRUE, colour = "black") +
   geom_point(aes(y = abun), fill = "#506424", size = 2, shape = 21) +
-  labs(y = bquote("Cyanbacteria Abundance"~(ASU/mL))) +
+  labs(y = bquote("Cyanobacteria Abundance"~(ASU/mL))) +
   annotation_logticks(sides = "l") +
   scale_y_log10(breaks = c(1, 10, 100)) +
   scale_x_continuous(name = bquote('Internal Phosphorus Load'~(mg/m^2/Aug-Sep)))
